@@ -5,7 +5,7 @@
 //
 //     import deflate from "github.com/bhare1985/goose-libdeflate@v1.26";
 //
-// plus git, cmake and a C compiler on the machine that builds it.
+// plus git and a C compiler on the machine that builds it.
 //
 // Like base64 in the standard library, the calls append to the `out` builder
 // you pass and leave what was already in it alone:

@@ -1,5 +1,24 @@
-// The native part of the deflate package: libdeflate and the C layer over it,
-// a CMake project (CMakeLists.txt beside this file).
-cmake_target = "goose_libdeflate";
+// The native part of the deflate package: the C layer in src/ and the
+// libdeflate sources it calls, compiled by Goose's own C compiler. No cmake
+// is needed. The list is the library's source list from its CMakeLists.txt,
+// except that the two cpu_features.c files go through wrappers in src/.
+c_sources = [
+    "src/goose_libdeflate.c",
+    "vendor/libdeflate/lib/adler32.c",
+    "src/arm_cpu_features.c",
+    "vendor/libdeflate/lib/crc32.c",
+    "vendor/libdeflate/lib/deflate_compress.c",
+    "vendor/libdeflate/lib/deflate_decompress.c",
+    "vendor/libdeflate/lib/gzip_compress.c",
+    "vendor/libdeflate/lib/gzip_decompress.c",
+    "vendor/libdeflate/lib/utils.c",
+    "src/x86_cpu_features.c",
+    "vendor/libdeflate/lib/zlib_compress.c",
+    "vendor/libdeflate/lib/zlib_decompress.c",
+];
+c_include = ["vendor/libdeflate", "src"];
+// What libdeflate's own build uses for a release.
+c_flags_cc = ["-O2", "-DNDEBUG"];
+
 // The tests and examples are programs of their own, not part of the package.
 exclude = ["test", "examples", "vendor"];

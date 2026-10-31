@@ -13,8 +13,8 @@ import deflate from "github.com/bhare1985/goose-libdeflate@v1.26";
 
 The tag follows libdeflate's version, so `@v1.26` is libdeflate 1.26.
 
-The first build needs `git`, `cmake` and a C compiler. Goose caches the result
-in `~/.goose`. Both `goose program.goose` and `goose build program.goose` work.
+The first build needs `git` and a C compiler (gcc, clang or MSVC). Goose
+compiles the C itself and caches the result in `~/.goose`. Both `goose program.goose` and `goose build program.goose` work.
 
 ## Example
 
@@ -96,15 +96,18 @@ let adler = deflate::adler32(data);           // what zlib uses
 | | |
 |---|---|
 | `deflate.goose` | the Goose module |
-| `deflate.build` | tells Goose to build the CMake target `goose_libdeflate` |
-| `CMakeLists.txt` | builds libdeflate and the C layer as static libraries |
+| `deflate.build` | lists the C files for Goose to compile |
 | `src/` | the C layer: handles as `i64`, buffers as slices |
 | `vendor/libdeflate` | libdeflate 1.26, unmodified |
 | `test/`, `examples/` | programs of their own, not part of the package |
 
-libdeflate is built with its own CMake project, so its compiler checks and its
-choice of code for your CPU (AVX2, AVX-512, PCLMUL, ARM CRC32 and so on) are
-the same as upstream's.
+libdeflate's sources are compiled with the same `-O2` as upstream's release
+build. It picks the code for your CPU (AVX2, AVX-512, PCLMUL, ARM CRC32 and so
+on) at run time, as it does upstream.
+
+Upstream's CMake file also checks whether your assembler knows a few newer
+instructions. This package doesn't run those checks, so a very old binutils
+(before about 2018) could fail to build it.
 
 ## Tests
 
