@@ -1,0 +1,5 @@
+// The native part of the deflate package: libdeflate and the C layer over it,
+// a CMake project (CMakeLists.txt beside this file).
+cmake_target = "goose_libdeflate";
+// The tests and examples are programs of their own, not part of the package.
+exclude = ["test", "examples", "vendor"];
