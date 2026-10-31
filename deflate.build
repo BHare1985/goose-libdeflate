@@ -20,5 +20,6 @@ c_include = ["vendor/libdeflate", "src"];
 // What libdeflate's own build uses for a release.
 c_flags_cc = ["-O2", "-DNDEBUG"];
 
-// The tests and examples are programs of their own, not part of the package.
-exclude = ["test", "examples", "vendor"];
+// The benchmark, tests and examples are programs of their own, not part of the
+// package.
+exclude = ["bench", "test", "examples", "vendor"];

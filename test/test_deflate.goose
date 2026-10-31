@@ -622,6 +622,62 @@ fn test_random_damage() {
     check(wrong == 0, "damaged streams fail cleanly or decode correctly");
 }
 
+// --- buffers you provide --------------------------------------------------------
+
+fn test_into() {
+    var data: u8[>..] = [];
+    text(data, 60000, 60);
+
+    for f in FORMATS {
+        var c = deflate::compressor(6);
+        var d = deflate::decompressor();
+        let bound = deflate::compress_bound(c, data.len, f);
+
+        // The same bytes as the appending call gives.
+        var buf: u8[>..] = [];
+        buf.resize(bound, 0);
+        let n = deflate::compress_into(c, buf, data, f);
+        var appended: u8[>..] = [];
+        deflate::compress(c, appended, data, f);
+        check(n > 0 && same(buf[..n], appended), str(format_name(f), ": compress_into"));
+
+        // A buffer that is too small gives 0, one byte short included.
+        var small: u8[>..] = [];
+        small.resize(n - 1, 0);
+        check(deflate::compress_into(c, small, data, f) == 0, str(format_name(f), ": one byte short"));
+        small.resize(n, 0);
+        check(deflate::compress_into(c, small, data, f) == n, str(format_name(f), ": exactly enough"));
+
+        // Decompressing into a buffer bigger than needed, exact, and too small.
+        var out: u8[>..] = [];
+        out.resize(data.len + 100, 0);
+        var info = deflate::Info { 0, 0 };
+        check(deflate::decompress_into(d, out, appended, f, info) == deflate::SUCCESS, "decompress_into");
+        check(info.out_nbytes == data.len && same(out[..info.out_nbytes], data), "decompress_into: result");
+        check(info.in_nbytes == appended.len, "decompress_into: info.in_nbytes");
+        out.resize(data.len);
+        check(deflate::decompress_into(d, out, appended, f, info) == deflate::SUCCESS, "exactly enough room");
+        out.resize(data.len - 1);
+        check(deflate::decompress_into(d, out, appended, f, info) == deflate::INSUFFICIENT_SPACE,
+              "one byte short of room");
+
+        // The buffers can be used again.
+        for i in 5 {
+            var more: u8[>..] = [];
+            text(more, 1000 * (i + 1), 70 + i as! u64);
+            var big: u8[>..] = [];
+            big.resize(deflate::compress_bound(c, more.len, f), 0);
+            let m = deflate::compress_into(c, big, more, f);
+            var back: u8[>..] = [];
+            back.resize(more.len, 0);
+            check(deflate::decompress_into(d, back, big[..m], f, info) == deflate::SUCCESS && same(back, more),
+                  "reused buffers");
+        }
+        deflate::close(c);
+        deflate::close(d);
+    }
+}
+
 fn test_misc() {
     let major, minor = deflate::native_version();
     check(major == deflate::VERSION_MAJOR && minor == deflate::VERSION_MINOR,
@@ -646,6 +702,7 @@ fn main() {
     test_offsets();
     test_zero_max_size();
     test_info_on_failure();
+    test_into();
     test_large();
     test_random_roundtrips();
     test_random_damage();

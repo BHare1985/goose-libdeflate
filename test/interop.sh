@@ -22,6 +22,10 @@ head -c 5000000 /dev/zero > "$work/in.zeros"
 printf 'x' > "$work/in.one"
 : > "$work/in.empty"
 
+# The examples that work on files.
+"$GOOSE" build -o "$work/gz_compress" examples/gz_compress.goose >/dev/null
+"$GOOSE" build -o "$work/gz_decompress" examples/gz_decompress.goose >/dev/null
+
 fail=0
 for name in text noise zeros one empty; do
 	in="$work/in.$name"
@@ -38,6 +42,11 @@ assert zlib.decompress(zl) == orig, "zlib stream"
 assert zlib.decompress(raw, -15) == orig, "raw deflate stream"
 PY
 	done
+	"$work/gz_compress" "$in" "$work/ex.gz" 6 >/dev/null
+	gzip -dc < "$work/ex.gz" | cmp - "$in" || { echo "FAIL: gz_compress example on $name"; fail=1; }
+	gzip -6 -c < "$in" > "$work/ex2.gz"
+	"$work/gz_decompress" "$work/ex2.gz" "$work/ex.out" >/dev/null
+	cmp "$work/ex.out" "$in" || { echo "FAIL: gz_decompress example on $name"; fail=1; }
 	"$work/tool" checksum - - "$in" "$work/sums"
 	python3 -I - "$in" "$work/sums" <<'PY' || { echo "FAIL: checksums of $name"; fail=1; }
 import sys, zlib

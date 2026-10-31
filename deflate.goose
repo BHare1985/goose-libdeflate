@@ -65,6 +65,9 @@ let INSUFFICIENT_SPACE: i32 = 3;
 let MIN_LEVEL: i32 = 0;
 let MAX_LEVEL: i32 = 12;
 let DEFAULT_LEVEL: i32 = 6;
+// The names the other libdeflate bindings give the ends of the range.
+let FASTEST_LEVEL: i32 = 1;
+let BEST_LEVEL: i32 = 12;
 
 // How much decompress will produce unless told otherwise. A few kilobytes of
 // input can describe gigabytes of output, so it's good to have a cap.
@@ -133,15 +136,22 @@ fn compress_bound(c: Compressor, size: i64, format: Format) -> i64 {
     return gld_compress_bound(c.handle, code(format), size);
 }
 
+// Compresses `data` into `out`, which you provide, and returns the number of
+// bytes written, or 0 if they don't fit. An `out` of compress_bound() bytes
+// always fits. This is the fast way to compress many buffers: allocate `out`
+// once and reuse it.
+fn compress_into(c: Compressor, out: u8[:], data: const u8[:], format: Format) -> i64 {
+    assert(c.handle != 0);
+    return gld_compress(c.handle, code(format), data, out);
+}
+
 // Appends `data`, compressed, to `out`. Returns the number of bytes appended.
 fn compress(c: Compressor, out: u8[>..]&, data: const u8[:], format: Format) -> i64 {
-    assert(c.handle != 0);
-    let f = code(format);
     let start = out.len;
     // Make room for the worst case, so that it can't run out, and give back
     // what turned out to be unused.
-    out.resize(start + gld_compress_bound(c.handle, f, data.len), 0);
-    let n = gld_compress(c.handle, f, data, out[start..]);
+    out.resize(start + compress_bound(c, data.len, format), 0);
+    let n = compress_into(c, out[start..], data, format);
     assert(n > 0);
     out.resize(start + n);
     return n;
@@ -176,7 +186,7 @@ fn close(d: Decompressor&) {
 //
 // The size of the output isn't known, so this tries a buffer of a guess and
 // doubles it while the data doesn't fit, up to `max_size` bytes. If you know
-// the size, decompress_exact doesn't need to do that.
+// the size, decompress_exact or decompress_into don't need to do that.
 fn decompress(d: Decompressor, out: u8[>..]&, data: const u8[:], format: Format,
               info: Info&, max_size: i64 = DEFAULT_MAX_SIZE) -> i32 {
     assert(d.handle != 0);
@@ -214,19 +224,28 @@ fn decompress(out: u8[>..]&, data: const u8[:], format: Format,
     return status;
 }
 
-// For when you know exactly how many bytes `data` decompresses to, say from
-// the size a container format stores next to it. It appends exactly `size`
-// bytes to `out`, with a single pass over the data and no retrying. It returns
+// Decompresses `data` into `out`, which you provide and which has to be big
+// enough for the whole result. Returns SUCCESS and fills in `info`
+// (`info.out_nbytes` is how much of `out` was written), or INSUFFICIENT_SPACE
+// if `out` is too small. When you know the decompressed size, as you do with a
+// container format that stores it, this is the fast way to decompress: no
+// growing and retrying, and with an `out` you reuse, no allocation.
+fn decompress_into(d: Decompressor, out: u8[:], data: const u8[:], format: Format,
+                   info: Info&) -> i32 {
+    assert(d.handle != 0);
+    return gld_decompress(d.handle, code(format), data, out, info);
+}
+
+// Appends exactly `size` bytes of decompressed `data` to `out`. It returns
 // SHORT_OUTPUT if the data has fewer bytes than that (`info.out_nbytes` is how
 // many it has) and INSUFFICIENT_SPACE if it has more. When it fails, `out` is
 // as it was.
 fn decompress_exact(d: Decompressor, out: u8[>..]&, data: const u8[:], format: Format,
                     size: i64, info: Info&) -> i32 {
-    assert(d.handle != 0);
     assert(size >= 0);
     let start = out.len;
     out.resize(start + size, 0);
-    var status = gld_decompress(d.handle, code(format), data, out[start..], info);
+    var status = decompress_into(d, out[start..], data, format, info);
     if status == SUCCESS && info.out_nbytes != size { status = SHORT_OUTPUT; }
     if status != SUCCESS { out.resize(start); }
     return status;

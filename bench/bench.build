@@ -1,0 +1,3 @@
+// The zlib baseline for bench.goose.
+c_sources = ["zlib_shim.c"];
+c_libs = ["z"];
