@@ -45,7 +45,7 @@ jobs:
         shell: bash
         run: git config --global core.autocrlf false
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -73,7 +73,7 @@ jobs:
       # Goose's .build sidecar configures CMake for the submodule and native
       # adapter. Cache the package build products by all build inputs.
       - name: Cache Goose native build
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.goose/build
           key: native-${{ matrix.name }}-${{ hashFiles('deflate.build', 'deflate.goose', 'CMakeLists.txt', '.gitmodules', 'include/**', 'src/**', 'vendor/libdeflate/**') }}
