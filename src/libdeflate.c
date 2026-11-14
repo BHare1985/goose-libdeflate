@@ -1,5 +1,5 @@
 /*
- * TinyCC cannot compile the native inline adapters in include/deflate.h.
+ * TinyCC cannot compile the native inline adapters in libdeflate.h.
  * Emit ordinary external functions from that same header for the JIT backend.
  * Goose's generated C defines these packed slice types itself.
  */
@@ -10,5 +10,5 @@ typedef struct { uint8_t *data; int64_t len; } sl_u8;
 typedef struct { int64_t *data; int64_t len; } sl_i64;
 #pragma pack(pop)
 
-#define GDF_INLINE
-#include "../include/deflate.h"
+#define GLD_INLINE
+#include "libdeflate.h"

@@ -18,14 +18,14 @@ system-installed libdeflate. The gitlink is the exact source pin, while
 test suite and install rules, then links the static codec into
 `goose_libdeflate`. Upstream CMake owns the architecture-specific source list,
 assembler feature checks and runtime CPU dispatch. The package adapter is
-`include/deflate.h`; `deflate.build` adds that header to generated Goose C and
+`src/libdeflate.h`; `deflate.build` adds that header to generated Goose C and
 names the CMake target.
 
 A vendor update is deliberate:
 
 1. Fetch and review the intended upstream commit or tag in the submodule, then
    commit the new gitlink. Update `vendor/README.md` to document the new pin.
-2. Update `VERSION_MAJOR` / `VERSION_MINOR` and verify `gdf_version_*` reports
+2. Update `VERSION_MAJOR` / `VERSION_MINOR` and verify `gld_version_*` reports
    the linked header version.
 3. Re-check CMake's source selection, the inline adapter and result enum static
    assertions. Run `make verify` and compare benchmark results on the same
@@ -33,21 +33,21 @@ A vendor update is deliberate:
 
 ## Why the C boundary is small
 
-For native GCC/Clang/MSVC builds, Goose splices `include/deflate.h` into the
-application's generated C. Adapter functions use `GDF_INLINE`, defaulting to a
+For native GCC/Clang/MSVC builds, Goose splices `src/libdeflate.h` into the
+application's generated C. Adapter functions use `GLD_INLINE`, defaulting to a
 compiler-specific always-inline form, so slice unpacking, format selection and
 the libdeflate call can live in the caller's generated function. There is no
-separate out-of-line `gdf_*` hop on that path.
+separate out-of-line `gld_*` hop on that path.
 
 TinyCC cannot use those native inline definitions. Under `__TINYC__` the header
-body is omitted from generated code, and `src/native.c` includes the same header
-with `GDF_INLINE` empty. That emits ordinary C adapter functions into the
+body is omitted from generated code, and `src/libdeflate.c` includes the same header
+with `GLD_INLINE` empty. That emits ordinary C adapter functions into the
 CMake-built static target for the JIT to call. One implementation therefore
 serves the optimized native and TinyCC backends without maintaining two adapter
 bodies.
 
 The native handle is an opaque `u64` representation of libdeflate's pointer.
-`gdf_decompress` writes the two counts through a Goose `i64[:]`; it uses
+`gld_decompress` writes the two counts through a Goose `i64[:]`; it uses
 `memcpy` because Goose arrays may be packed and must not be cast to an aligned
 `int64_t *`. `Info` is assembled in Goose from those two counts. Empty slices
 use a non-null dummy pointer because libdeflate may interpret a null pointer as
@@ -66,7 +66,7 @@ successful handle with `defer close(handle)`, does not copy a live handle, and
 uses one handle per concurrent thread. A false constructor records
 `BadLevel` or `OutOfMemory`; an operation on a closed handle records `Closed`.
 
-`include/deflate.h` keeps the last result in C thread-local storage. Each
+`src/libdeflate.h` keeps the last result in C thread-local storage. Each
 fallible Goose operation records success as well as failure, so `status()` and
 `error()` refer to the latest call on the current thread, not stale history.
 The C implementation spells thread-local storage as `_Thread_local` or
@@ -78,10 +78,10 @@ cannot overwrite the caller thread's status.
 Goose slices cross as packed `{data, len}` values. `Info` does not cross the C
 boundary directly: Goose uses an `i64[2]` counts buffer and C copies into it.
 Handles cross as `u64`. Keep these declarations aligned between
-`deflate.goose`, `include/deflate.h`, and the packed slice ABI.
+`deflate.goose`, `src/libdeflate.h`, and the packed slice ABI.
 
 The adapter translates upstream `libdeflate_result` values into the public
-`Status` codes. `_Static_assert`s in `include/deflate.h` pin the native values
+`Status` codes. `_Static_assert`s in `src/libdeflate.h` pin the native values
 used for `Success`, `BadData`, `ShortOutput` and `InsufficientSpace`. Local
 validation statuses occupy distinct values. Do not rely on ordinal conversion
 between the Goose enum and C integer codes; `status_of` and `status_code` are

@@ -1,5 +1,5 @@
-// Native builds inline the C adapter from include/deflate.h; CMake builds
+// Native builds inline the C adapter from src/libdeflate.h; CMake builds
 // libdeflate and the same adapter for Goose's TinyCC backend.
-c_headers = ["include/deflate.h"];
+c_headers = ["src/libdeflate.h"];
 cmake_target = "goose_libdeflate";
 exclude = ["test", "examples", "bench", "vendor", "docs", ".pi", ".github"];

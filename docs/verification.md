@@ -13,10 +13,12 @@ at least one decoder must be independent of this binding.
 | `make interop` | Python zlib and system gzip read/write streams interoperably; checksums and examples are exercised |
 | `make examples` | Each example root typechecks with the selected Goose compiler |
 | `make verify` | `check`, `test`, `interop` and `examples` all pass |
-| `make bench` | Builds and runs the native benchmark; this is measurement, not a correctness gate |
+| `make bench` | Runs the corpus comparison against zlib; measurement, not a correctness gate |
+| `make overhead` | Measures Goose API overhead against direct C calls; measurement only |
 
 `GOOSE=/path/to/goose` selects the compiler. Interop requires Python 3 and
-`gzip`. Benchmarks additionally need a C compiler and zlib development headers.
+`gzip`. `make overhead` needs Python 3, CMake and GCC/Clang; the zlib corpus
+benchmark additionally needs zlib development headers.
 
 ## Goose tests: `test/test_deflate.goose`
 

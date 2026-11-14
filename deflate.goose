@@ -85,21 +85,21 @@ struct Compressor { handle: u64 }
 // A libdeflate decompressor. Its handle is 0 when it isn't open.
 struct Decompressor { handle: u64 }
 
-// The C adapter is declared in include/deflate.h. Native compilers inline its
-// functions into generated C; TinyCC links the copies in src/native.c.
-extern fn gdf_record_status(code: i32);
-extern fn gdf_last_status() -> i32;
-extern fn gdf_version_major() -> i32;
-extern fn gdf_version_minor() -> i32;
-extern fn gdf_open_compressor(level: i32) -> u64;
-extern fn gdf_close_compressor(handle: u64);
-extern fn gdf_bound(handle: u64, format: i32, in_nbytes: i64) -> i64;
-extern fn gdf_compress(handle: u64, format: i32, data: const u8[:], out: u8[:]) -> i64;
-extern fn gdf_open_decompressor() -> u64;
-extern fn gdf_close_decompressor(handle: u64);
-extern fn gdf_decompress(handle: u64, format: i32, data: const u8[:], out: u8[:], counts: i64[:]) -> i32;
-extern fn gdf_adler32(data: const u8[:], initial: u32) -> u32;
-extern fn gdf_crc32(data: const u8[:], initial: u32) -> u32;
+// The C adapter is declared in src/libdeflate.h. Native compilers inline its
+// functions into generated C; TinyCC links the copies in src/libdeflate.c.
+extern fn gld_record_status(code: i32);
+extern fn gld_last_status() -> i32;
+extern fn gld_version_major() -> i32;
+extern fn gld_version_minor() -> i32;
+extern fn gld_open_compressor(level: i32) -> u64;
+extern fn gld_close_compressor(handle: u64);
+extern fn gld_bound(handle: u64, format: i32, in_nbytes: i64) -> i64;
+extern fn gld_compress(handle: u64, format: i32, data: const u8[:], out: u8[:]) -> i64;
+extern fn gld_open_decompressor() -> u64;
+extern fn gld_close_decompressor(handle: u64);
+extern fn gld_decompress(handle: u64, format: i32, data: const u8[:], out: u8[:], counts: i64[:]) -> i32;
+extern fn gld_adler32(data: const u8[:], initial: u32) -> u32;
+extern fn gld_crc32(data: const u8[:], initial: u32) -> u32;
 
 // Translate native results and Goose-side validation failures to one Status.
 fn status_of(code: i32) -> Status {
@@ -133,17 +133,17 @@ fn status_code(status: Status) -> i32 {
 // Record every outcome (including success) so the last error describes the
 // call that returned false, not an older operation.
 fn record(code: i32) -> bool {
-    gdf_record_status(code);
+    gld_record_status(code);
     return code == 0;
 }
 
 fn record_status(status: Status) -> bool {
-    gdf_record_status(status_code(status));
+    gld_record_status(status_code(status));
     return false;
 }
 
 fn status() -> Status {
-    return status_of(gdf_last_status());
+    return status_of(gld_last_status());
 }
 
 fn error() -> const u8[:] {
@@ -164,7 +164,7 @@ fn code(format: Format) -> i32 {
 // The libdeflate version the C was built from, as major and minor. It should
 // match VERSION_MAJOR and VERSION_MINOR.
 fn native_version() -> i32, i32 {
-    return gdf_version_major(), gdf_version_minor();
+    return gld_version_major(), gld_version_minor();
 }
 
 // --- compression ---------------------------------------------------------------
@@ -176,7 +176,7 @@ fn compressor(level: i32 = DEFAULT_LEVEL) -> Compressor, bool {
     if level < MIN_LEVEL || level > MAX_LEVEL {
         return Compressor { handle: 0 }, record_status(Status.BadLevel);
     }
-    let handle = gdf_open_compressor(level);
+    let handle = gld_open_compressor(level);
     if handle == 0 {
         return Compressor { handle: 0 }, record_status(Status.OutOfMemory);
     }
@@ -184,7 +184,7 @@ fn compressor(level: i32 = DEFAULT_LEVEL) -> Compressor, bool {
 }
 
 fn close(c: Compressor&) {
-    gdf_close_compressor(c.handle);
+    gld_close_compressor(c.handle);
     c.handle = 0;
 }
 
@@ -193,7 +193,7 @@ fn close(c: Compressor&) {
 fn compress_bound(c: const Compressor&, size: i64, format: Format) -> i64 {
     if c.handle == 0 { record_status(Status.Closed); return 0; }
     if size < 0 { record_status(Status.InvalidArgument); return 0; }
-    let bound = gdf_bound(c.handle, code(format), size);
+    let bound = gld_bound(c.handle, code(format), size);
     if bound < 0 { record_status(Status.InvalidArgument); return 0; }
     record(0);
     return bound;
@@ -204,7 +204,7 @@ fn compress_bound(c: const Compressor&, size: i64, format: Format) -> i64 {
 fn compress_into(c: const Compressor&, out: u8[:], data: const u8[:],
                  format: Format) -> i64, bool {
     if c.handle == 0 { return 0, record_status(Status.Closed); }
-    let n = gdf_compress(c.handle, code(format), data, out);
+    let n = gld_compress(c.handle, code(format), data, out);
     if n > 0 { return n, record(0); }
     if n == 0 { return 0, record_status(Status.InsufficientSpace); }
     return 0, record_status(Status.InvalidArgument);
@@ -254,7 +254,7 @@ fn compressed(data: const u8[:], format: Format, level: i32 = DEFAULT_LEVEL) -> 
 // Allocates a reusable decompressor. Use `defer close(d)` or the one-shot
 // builder APIs if the caller should not manage a native handle.
 fn decompressor() -> Decompressor, bool {
-    let handle = gdf_open_decompressor();
+    let handle = gld_open_decompressor();
     if handle == 0 {
         return Decompressor { handle: 0 }, record_status(Status.OutOfMemory);
     }
@@ -262,7 +262,7 @@ fn decompressor() -> Decompressor, bool {
 }
 
 fn close(d: Decompressor&) {
-    gdf_close_decompressor(d.handle);
+    gld_close_decompressor(d.handle);
     d.handle = 0;
 }
 
@@ -287,7 +287,7 @@ fn decompress(d: const Decompressor&, out: u8[>..]&, data: const u8[:], format: 
         if size > max_size { size = max_size; }
         out.resize(start + size, 0);
         var counts: i64[2] = [0; 2];
-        let rc = gdf_decompress(d.handle, f, data, out[start..], counts);
+        let rc = gld_decompress(d.handle, f, data, out[start..], counts);
         if rc == 0 {
             info.in_nbytes = counts[0];
             info.out_nbytes = counts[1];
@@ -325,7 +325,7 @@ fn decompress_into(d: const Decompressor&, out: u8[:], data: const u8[:], format
                    info: Info&) -> bool {
     if d.handle == 0 { return record_status(Status.Closed); }
     var counts: i64[2] = [0; 2];
-    let rc = gdf_decompress(d.handle, code(format), data, out, counts);
+    let rc = gld_decompress(d.handle, code(format), data, out, counts);
     if rc == 0 {
         info.in_nbytes = counts[0];
         info.out_nbytes = counts[1];
@@ -391,11 +391,11 @@ let CRC32_INIT:   u32 = 0;
 // The Adler-32 of `data` (the checksum zlib streams end with). To checksum in
 // pieces, pass the result for the earlier pieces as `adler`.
 fn adler32(data: const u8[:], adler: u32 = ADLER32_INIT) -> u32 {
-    return gdf_adler32(data, adler);
+    return gld_adler32(data, adler);
 }
 
 // The CRC-32 of `data` (the checksum gzip streams end with). To checksum in
 // pieces, pass the result for the earlier pieces as `crc`.
 fn crc32(data: const u8[:], crc: u32 = CRC32_INIT) -> u32 {
-    return gdf_crc32(data, crc);
+    return gld_crc32(data, crc);
 }

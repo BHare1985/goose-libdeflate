@@ -6,7 +6,7 @@ GOOSE ?= goose
 ENTRY := deflate.goose
 EXAMPLES := $(sort $(wildcard examples/*.goose))
 
-.PHONY: all submodule tools check test interop examples bench verify fmt fmt-check clean
+.PHONY: all submodule tools check test interop examples bench overhead verify fmt fmt-check clean
 
 all: check
 
@@ -18,7 +18,7 @@ tools: submodule
 	@$(GOOSE) version
 	@echo "C compiler: $$(command -v cc 2>/dev/null || command -v gcc 2>/dev/null || command -v clang 2>/dev/null || echo 'not found')"
 	@echo "cmake: $$(command -v cmake 2>/dev/null || echo 'not found - required for libdeflate build')"
-	@echo "python3: $$(command -v python3 2>/dev/null || echo 'not found - required for interop')"
+	@echo "python3: $$(command -v python3 2>/dev/null || echo 'not found - required for interop/overhead')"
 	@echo "gzip: $$(command -v gzip 2>/dev/null || echo 'not found - required for interop')"
 
 check:
@@ -37,6 +37,9 @@ examples: check
 
 bench: submodule
 	@GOOSE="$(GOOSE)" bench/run.sh
+
+overhead: submodule
+	@GOOSE="$(GOOSE)" python3 bench/run_overhead.py --cc "$(CC)"
 
 verify: check test interop examples
 	@echo "verify: ok"

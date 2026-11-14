@@ -40,6 +40,8 @@ libdeflate also produced smaller output on this corpus: 1.78 MB versus zlib's
 1.79 MB at level 6, and 1.74 MB versus 1.78 MB at level 9. Levels 10–12 search
 harder still (1.69 MB at level 12 here), at lower throughput. Full per-file
 results and the benchmark method are in [bench/RESULTS.md](bench/RESULTS.md).
+See [bench/README.md](bench/README.md) for the zlib comparison and the Goose
+binding-overhead versus direct-C benchmark.
 Numbers vary by machine; these were measured on an AMD Ryzen 5 3550H under Linux.
 
 libdeflate works on complete buffers in memory. It has no streaming interface.
@@ -193,14 +195,15 @@ make test        # in-process, debug and optimized tests plus native TLS test
 make interop     # Python zlib and system gzip, both directions
 make examples    # typecheck every example
 make verify      # all correctness checks above
-make bench       # fetch corpora, compile and run the benchmark
+make bench       # fetch corpora, compare against zlib
+make overhead    # compare Goose calls with direct C calls
 make fmt         # format Goose sources
 ```
 
 Set `GOOSE=/path/to/goose` to choose a compiler. The Makefile and shell scripts
 are POSIX developer helpers; Windows CI runs the Goose commands directly rather
-than depending on `make` or Bash. The interop tests need Python 3 and `gzip`.
-The benchmark additionally needs a C compiler and zlib development headers
+than depending on `make` or Bash. Interop needs Python 3 and `gzip`; the overhead benchmark needs Python 3 and
+CMake. The zlib corpus benchmark additionally needs zlib development headers
 (`zlib1g-dev` on Debian/Ubuntu). See [docs/verification.md](docs/verification.md)
 for the test-by-test contract and
 [docs/coverage.md](docs/coverage.md) for what is intentionally not exposed.
@@ -212,17 +215,17 @@ for the test-by-test contract and
 | `deflate.goose` | public Goose module and handle/status behavior |
 | `deflate.build` | Goose CMake target and inline C header declaration |
 | `CMakeLists.txt` | static libdeflate target and TinyCC adapter fallback |
-| `include/deflate.h` | native inline adapter and TinyCC fallback declarations |
-| `src/native.c` | exports the same adapter functions for TinyCC |
+| `src/libdeflate.h` | inline native adapter and TinyCC fallback declarations |
+| `src/libdeflate.c` | emits the same adapter functions for TinyCC |
 | `vendor/libdeflate/` | pinned libdeflate 1.26 git submodule, unmodified |
 | `test/` | Goose contract, thread-local status, and independent interoperability tests |
 | `examples/` | file compression, decompression and round-trip programs |
-| `bench/` | zlib comparison benchmark, harness and recorded results |
+| `bench/` | [zlib and direct-C comparisons](bench/README.md), scripts and recorded results |
 | `docs/` | usage guide, upstream API coverage, internals and verification contract |
 | `ROADMAP.md`, `CHANGELOG.md` | design boundaries and shipped surface |
 
 The package builds libdeflate's static library with upstream CMake and uses
-its assembler feature checks and runtime CPU dispatch. `include/deflate.h`
+its assembler feature checks and runtime CPU dispatch. `src/libdeflate.h`
 inlines slice unpacking and dispatch into native Goose-generated C; the same
 header is compiled into exported adapter functions for TinyCC.
 

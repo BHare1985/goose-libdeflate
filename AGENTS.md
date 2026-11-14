@@ -2,8 +2,8 @@
 
 This repository binds upstream libdeflate 1.26 to Goose as package version
 0.2.0. The public API is in **[deflate.goose](deflate.goose)**; the native
-boundary is the inline adapter in **[include/deflate.h](include/deflate.h)**,
-with the TinyCC fallback emitted by [src/native.c](src/native.c). Read those and
+boundary is the inline adapter in **[src/libdeflate.h](src/libdeflate.h)**,
+with the TinyCC fallback emitted by [src/libdeflate.c](src/libdeflate.c). Read those and
 [CMakeLists.txt](CMakeLists.txt) before changing the binding. `vendor/libdeflate/`
 is a pinned submodule and should stay unmodified.
 
@@ -22,8 +22,8 @@ error policy, [docs/guide.md](docs/guide.md) for caller patterns, and
 | `deflate.goose` | Public Goose module: formats, typed statuses, handles, buffer management, checksums |
 | `deflate.build` | Goose `.build` sidecar: CMake target and inline C header |
 | `CMakeLists.txt` | Builds static libdeflate plus the TinyCC adapter fallback |
-| `include/deflate.h` | `GDF_INLINE` native FFI adapter and thread-local status slot |
-| `src/native.c` | Emits ordinary external adapter functions for TinyCC from the same header |
+| `src/libdeflate.h` | `GLD_INLINE` native FFI adapter and thread-local status slot |
+| `src/libdeflate.c` | Emits ordinary external adapter functions for TinyCC from the same header |
 | `vendor/libdeflate/` | Upstream libdeflate 1.26 submodule, pinned by gitlink; do not patch |
 | `.gitmodules` | Upstream submodule URL; exact revision is the gitlink |
 | `test/test_deflate.goose`, `test/status_threads.goose` | API contracts and native per-thread status isolation |
@@ -44,13 +44,14 @@ error policy, [docs/guide.md](docs/guide.md) for caller patterns, and
 | `make interop` | Test both directions against gzip and Python zlib |
 | `make examples` | Typecheck every example |
 | `make verify` | All correctness checks above |
-| `make bench` | Download corpora, run benchmark and update `bench/RESULTS.md` |
+| `make bench` | Download corpora, run zlib comparison and update `bench/RESULTS.md` |
+| `make overhead` | Compare Goose bindings with direct C calls to the same libdeflate build |
 | `make fmt` | Format Goose sources |
 | `make submodule` | Initialize the pinned libdeflate submodule |
 
 Set `GOOSE=/path/to/goose` to select a compiler. Builds need git, CMake 3.20+
-and a C compiler. Interop needs Python 3 and `gzip`; benchmarks also need zlib
-development headers.
+and a C compiler. Interop needs Python 3 and `gzip`; the overhead benchmark
+needs Python 3; the zlib corpus benchmark also needs zlib development headers.
 
 ## Goose and FFI rules
 
@@ -76,7 +77,7 @@ Keep these binding invariants in mind:
 4. **Keep the API whole-buffer.** libdeflate does not stream. Preserve output
    sizing, rollback on decompression failure, `max_size`, and consumed/produced
    byte counts.
-5. **Keep upstream pristine.** Change `include/deflate.h` or `CMakeLists.txt`
+5. **Keep upstream pristine.** Change `src/libdeflate.h` or `CMakeLists.txt`
    rather than patching `vendor/libdeflate/`. Upstream CMake owns CPU feature
    detection and runtime dispatch.
 6. **Independently decode output.** Same-library round trips are necessary but
