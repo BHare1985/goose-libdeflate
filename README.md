@@ -122,11 +122,14 @@ through every helper.
 | `Status.BadData` | Corrupt, wrong format, or unsupported data such as a preset zlib dictionary |
 | `Status.ShortOutput` | `decompress_exact` produced fewer bytes than the requested size |
 | `Status.InsufficientSpace` | Output exceeded the configured cap or fixed destination |
-| `Status.InvalidArgument` | Negative output cap or exact size |
+| `Status.InvalidArgument` | Negative cap/size, overlapping input/output, or an unrepresentable builder size |
 | `Status.BadLevel` | Compression level is outside 0–12 |
 | `Status.OutOfMemory` | libdeflate could not allocate a native context |
 | `Status.Closed` | A reusable handle has already been closed |
 | `Status.Other` | An unrecognized native failure |
+
+Input and output byte ranges must not overlap. The adapter rejects overlap as
+`InvalidArgument`; keep separate source and destination buffers.
 
 Use `Info` when a stream is followed by more data. `in_nbytes` identifies where
 the first stream ended; `out_nbytes` is how many bytes it produced:

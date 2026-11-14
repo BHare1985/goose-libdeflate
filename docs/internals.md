@@ -103,7 +103,7 @@ fallback adapter.
 3. **Compression bounds are upstream's contract.** Builder `compress` reserves
    `compress_bound` bytes. `compress_into` returns `(written, bool)` and reports
    insufficient output through `error()`; zero is not a successful empty
-   stream.
+   stream. Reject input/output overlap before calling libdeflate.
 4. **Decompression is capped.** Builder `decompress` grows output only up to
    `max_size`. Preserve zero-size behavior, overflow-safe retries and rollback
    on failure. A caller-supplied cap is the defense against expansion bombs.

@@ -43,7 +43,7 @@ are:
 | `Status.BadData` | Corrupt data, wrong format, or unsupported input (e.g. a zlib preset dictionary) |
 | `Status.ShortOutput` | `decompress_exact` decoded fewer bytes than the exact size requested |
 | `Status.InsufficientSpace` | Output exceeded `max_size` or a fixed destination |
-| `Status.InvalidArgument` | Negative output cap or exact size |
+| `Status.InvalidArgument` | Negative cap/size, overlapping ranges, or an unrepresentable append size |
 | `Status.BadLevel` | Compression level outside 0–12 |
 | `Status.OutOfMemory` | libdeflate could not allocate a native context |
 | `Status.Closed` | A reusable native handle was used after close |
@@ -88,8 +88,8 @@ write_stdout(packed[..written]);
 format and compression level. It returns 0 and records an error for an invalid
 size or closed handle. `compress_into` returns `(byte_count, bool)`; the error
 for false is available through `error()`. A too-small output buffer reports
-`InsufficientSpace`. The builder form reserves the bound, writes once and trims
-the unused capacity.
+`InsufficientSpace`; overlapping input/output ranges are `InvalidArgument`. The
+builder form reserves the bound, writes once and trims the unused capacity.
 
 Levels range from 0 to 12. Level 0 stores data, 1 is the fastest compression,
 6 is the default, and 12 searches hardest for smaller output. Compression can
@@ -114,7 +114,9 @@ lower `max_size` for untrusted input when the application has a tighter limit.
 A negative cap is `InvalidArgument`.
 
 When the decoded length is known, use a fixed buffer or an exact-size builder.
-The one-shot fixed-buffer form also hides the native decompressor lifetime:
+Input and output ranges must not overlap; the adapter rejects overlap as
+`InvalidArgument`. The one-shot fixed-buffer form also hides the native
+decompressor lifetime:
 
 ```goose
 var plain: u8[>..] = [];

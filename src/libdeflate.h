@@ -61,6 +61,19 @@ GLD_INLINE void gld_close_decompressor(uint64_t handle) {
 GLD_INLINE int32_t gld_version_major(void) { return LIBDEFLATE_VERSION_MAJOR; }
 GLD_INLINE int32_t gld_version_minor(void) { return LIBDEFLATE_VERSION_MINOR; }
 
+/* libdeflate does not support input/output aliasing. Treat address arithmetic
+ * overflow as overlap rather than allowing a wrapped range through. */
+GLD_INLINE int gld_ranges_overlap(const void *a, size_t a_len,
+                                  const void *b, size_t b_len) {
+    if (a_len == 0 || b_len == 0) return 0;
+    uintptr_t a_start = (uintptr_t)a;
+    uintptr_t b_start = (uintptr_t)b;
+    if (a_len > UINTPTR_MAX - a_start || b_len > UINTPTR_MAX - b_start) return 1;
+    uintptr_t a_end = a_start + a_len;
+    uintptr_t b_end = b_start + b_len;
+    return a_start < b_end && b_start < a_end;
+}
+
 /* Returns -1 for a closed handle, invalid length, or unrepresentable bound. */
 GLD_INLINE int64_t gld_bound(uint64_t handle, int32_t format, int64_t size) {
     if (handle == 0 || size < 0 || (uint64_t)size > SIZE_MAX) return -1;
@@ -83,6 +96,8 @@ GLD_INLINE int64_t gld_compress(uint64_t handle, int32_t format,
         (uint64_t)input.len > SIZE_MAX || (uint64_t)output.len > SIZE_MAX ||
         (input.len != 0 && input.data == NULL) ||
         (output.len != 0 && output.data == NULL)) return -1;
+    if (gld_ranges_overlap(input.data, (size_t)input.len,
+                           output.data, (size_t)output.len)) return -1;
     struct libdeflate_compressor *c = (struct libdeflate_compressor *)(uintptr_t)handle;
     unsigned char dummy = 0;
     const void *in = input.len ? input.data : &dummy;
@@ -116,6 +131,12 @@ GLD_INLINE int32_t gld_decompress(uint64_t handle, int32_t format,
         (input.len != 0 && input.data == NULL) ||
         (output.len != 0 && output.data == NULL) ||
         counts.len < 2 || counts.data == NULL) return GLD_INVALID_ARGUMENT;
+    if (gld_ranges_overlap(input.data, (size_t)input.len,
+                           output.data, (size_t)output.len) ||
+        gld_ranges_overlap(counts.data, 2 * sizeof(int64_t),
+                           input.data, (size_t)input.len) ||
+        gld_ranges_overlap(counts.data, 2 * sizeof(int64_t),
+                           output.data, (size_t)output.len)) return GLD_INVALID_ARGUMENT;
 
     struct libdeflate_decompressor *d = (struct libdeflate_decompressor *)(uintptr_t)handle;
     size_t consumed = 0, written = 0;

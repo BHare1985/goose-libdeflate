@@ -72,6 +72,7 @@ let BEST_LEVEL:    i32 = 12;
 // How much decompress will produce unless told otherwise. A few kilobytes of
 // input can describe gigabytes of output, so it's good to have a cap.
 let DEFAULT_MAX_SIZE: i64 = 1 << 30;
+let MAX_BUILDER_LEN:  i64 = 0x7fffffffffffffff;
 
 // What a decompression tells you about the stream it read: how many bytes of
 // the input it took, and how many bytes it produced. Anything after
@@ -224,6 +225,7 @@ fn compress(c: const Compressor&, out: u8[>..]&, data: const u8[:], format: Form
     let bound = compress_bound(c, data.len, format);
     if bound <= 0 { return false; }
     let start = out.len;
+    if bound > MAX_BUILDER_LEN - start { return record_status(Status.InvalidArgument); }
     out.resize(start + bound, 0);
     let n, ok = compress_into(c, out[start..], data, format);
     if !ok { out.resize(start); return false; }
@@ -279,6 +281,11 @@ fn decompress(d: const Decompressor&, out: u8[>..]&, data: const u8[:], format: 
     }
     let f = code(format);
     let start = out.len;
+    if max_size > MAX_BUILDER_LEN - start {
+        info.in_nbytes = 0;
+        info.out_nbytes = 0;
+        return record_status(Status.InvalidArgument);
+    }
     info.in_nbytes = 0;
     info.out_nbytes = 0;
     var size = max_size;
@@ -356,6 +363,11 @@ fn decompress_exact(d: const Decompressor&, out: u8[>..]&, data: const u8[:], fo
         return record_status(Status.InvalidArgument);
     }
     let start = out.len;
+    if size > MAX_BUILDER_LEN - start {
+        info.in_nbytes = 0;
+        info.out_nbytes = 0;
+        return record_status(Status.InvalidArgument);
+    }
     out.resize(start + size, 0);
     let ok = decompress_into(d, out[start..], data, format, info);
     if !ok { out.resize(start); return false; }

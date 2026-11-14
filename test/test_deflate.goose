@@ -720,6 +720,14 @@ fn test_into() {
         check(exact_ok && exact_n == n && deflate::status() == deflate::Status.Ok,
               str(format_name(f), ": exactly enough"));
 
+        // The native API does not permit input and output ranges to overlap.
+        var alias: u8[>..] = [];
+        alias.append(data);
+        alias.resize(bound, 0);
+        let alias_n, alias_ok = deflate::compress_into(c, alias, alias[..data.len], f);
+        check(!alias_ok && alias_n == 0 && deflate::status() == deflate::Status.InvalidArgument,
+              str(format_name(f), ": compress rejects overlapping buffers"));
+
         // Decompressing into a buffer bigger than needed, exact, and too small.
         var out: u8[>..] = [];
         out.resize(data.len + 100, 0);
@@ -732,6 +740,11 @@ fn test_into() {
         out.resize(data.len - 1);
         check(decompress_into_status(d, out, appended, f, info) == deflate::Status.InsufficientSpace,
               "one byte short of room");
+        var alias_stream: u8[>..] = [];
+        alias_stream.append(appended);
+        check(decompress_into_status(d, alias_stream, alias_stream, f, info) ==
+              deflate::Status.InvalidArgument && same(alias_stream, appended),
+              str(format_name(f), ": decompress rejects overlapping buffers"));
 
         // The buffers can be used again.
         for i in 5 {

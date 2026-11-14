@@ -75,8 +75,8 @@ Keep these binding invariants in mind:
    Keep mapping centralized in `status_of`; static assertions pin upstream
    result values. Do not introduce process-global error state.
 4. **Keep the API whole-buffer.** libdeflate does not stream. Preserve output
-   sizing, rollback on decompression failure, `max_size`, and consumed/produced
-   byte counts.
+   sizing, reject overlapping input/output ranges, roll back failed appends, and
+   keep `max_size` and consumed/produced counts correct.
 5. **Keep upstream pristine.** Change `src/libdeflate.h` or `CMakeLists.txt`
    rather than patching `vendor/libdeflate/`. Upstream CMake owns CPU feature
    detection and runtime dispatch.

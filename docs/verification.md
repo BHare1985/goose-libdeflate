@@ -28,8 +28,8 @@ formats and all thirteen compression levels. It covers:
 - known streams produced by independent zlib/gzip implementations;
 - empty, one-byte, text, zero-filled and pseudorandom input;
 - sizes at format/block/buffer boundaries and larger multi-block inputs;
-- compression bounds, fixed output buffers, one-byte-short buffers and reused
-  compressor/decompressor handles;
+- compression bounds, fixed output buffers, one-byte-short and overlapping
+  buffers, plus reused compressor/decompressor handles;
 - appending after existing bytes and restoring the builder after failures;
 - `Info.in_nbytes` and `Info.out_nbytes`, trailing data, and concatenated
   streams decoded one member at a time;
