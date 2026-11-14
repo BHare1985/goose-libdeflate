@@ -44,12 +44,12 @@ fn measure<F>() -> f64 {
 }
 
 struct Timing {
-    zlib_compress: f64,
-    libdeflate_compress: f64,
-    zlib_decompress: f64,
+    zlib_compress:         f64,
+    libdeflate_compress:   f64,
+    zlib_decompress:       f64,
     libdeflate_decompress: f64,
-    zlib_size: i64,
-    libdeflate_size: i64,
+    zlib_size:             i64,
+    libdeflate_size:       i64,
 }
 
 fn identical(a: const u8[:], b: const u8[:]) -> bool {
@@ -62,25 +62,28 @@ fn identical(a: const u8[:], b: const u8[:]) -> bool {
 fn zlib_level(level: i32) -> i32 { return min(level, 9); }
 
 fn bench_file(data: const u8[:], level: i32, zlib_too: bool) -> Timing {
-    var c = deflate::compressor(level);
-    var d = deflate::decompressor();
+    let c, c_ok = deflate::compressor(level);
+    let d, d_ok = deflate::decompressor();
+    assert(c_ok && d_ok);
+    defer deflate::close(c);
+    defer deflate::close(d);
     let zlib_format = deflate::Format.Zlib;
     let cap = deflate::compress_bound(c, data.len, zlib_format);
     var zbuf: u8[>..] = [];
     var dbuf: u8[>..] = [];
-    var out: u8[>..] = [];
+    var out:  u8[>..] = [];
     zbuf.resize(cap, 0);
     dbuf.resize(cap, 0);
     out.resize(data.len + 1, 0);
 
     let zn = zb_compress(zlib_level(level), data, zbuf);
-    let dn = deflate::compress_into(c, dbuf, data, zlib_format);
-    assert(zn > 0 && dn > 0);
+    let dn, compress_ok = deflate::compress_into(c, dbuf, data, zlib_format);
+    assert(zn > 0 && compress_ok && dn > 0);
 
     // Each one's output must come back as the file from the other.
     var info = deflate::Info { 0, 0 };
-    let status = deflate::decompress_into(d, out, zbuf[..zn], zlib_format, info);
-    assert(status == deflate::SUCCESS && identical(out[..info.out_nbytes], data));
+    let decompress_ok = deflate::decompress_into(d, out, zbuf[..zn], zlib_format, info);
+    assert(decompress_ok && identical(out[..info.out_nbytes], data));
     let back = zb_decompress(dbuf[..dn], out);
     assert(back == data.len && identical(out[..back], data));
 
@@ -93,13 +96,17 @@ fn bench_file(data: const u8[:], level: i32, zlib_too: bool) -> Timing {
         t.zlib_compress = measure() { sink += zb_compress(zlib_level(level), data, zbuf); };
         t.zlib_decompress = measure() { sink += zb_decompress(stream, out); };
     }
-    t.libdeflate_compress = measure() { sink += deflate::compress_into(c, dbuf, data, zlib_format); };
+    t.libdeflate_compress = measure() {
+        let n, ok = deflate::compress_into(c, dbuf, data, zlib_format);
+        assert(ok);
+        sink += n;
+    };
     t.libdeflate_decompress = measure() {
-        sink += deflate::decompress_into(d, out, stream, zlib_format, info) as i64 + info.out_nbytes;
+        let ok = deflate::decompress_into(d, out, stream, zlib_format, info);
+        assert(ok);
+        sink += info.out_nbytes;
     };
     assert(sink != 0);
-    deflate::close(c);
-    deflate::close(d);
     return t;
 }
 
@@ -133,12 +140,12 @@ fn main() {
     for level in levels {
         let zlib_too = level <= 9;
         var total_bytes: i64 = 0;
-        var zc: f64 = 0.0;
-        var dc: f64 = 0.0;
-        var zd: f64 = 0.0;
-        var dd: f64 = 0.0;
-        var zsize: i64 = 0;
-        var dsize: i64 = 0;
+        var zc:          f64 = 0.0;
+        var dc:          f64 = 0.0;
+        var zd:          f64 = 0.0;
+        var dd:          f64 = 0.0;
+        var zsize:       i64 = 0;
+        var dsize:       i64 = 0;
         for path in paths {
             var data: u8[>..] = [];
             guard read_file(path, data) else { write_stderr("cannot read a file\n"); exit(2); }

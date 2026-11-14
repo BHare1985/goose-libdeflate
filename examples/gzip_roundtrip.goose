@@ -11,12 +11,14 @@ fn main() {
 
     for level in [1, 6, 12] {
         var packed: u8[>..] = [];
-        deflate::compress(packed, data, deflate::Format.Gzip, level as! i32);
+        guard deflate::compress(packed, data, deflate::Format.Gzip, level as! i32) else {
+            print("compress failed: ", deflate::error());
+            exit(1);
+        }
 
         var plain: u8[>..] = [];
-        let status = deflate::decompress(plain, packed, deflate::Format.Gzip);
-        if status != deflate::SUCCESS {
-            print("level ", level, ": ", deflate::status_name(status));
+        guard deflate::decompress(plain, packed, deflate::Format.Gzip) else {
+            print("level ", level, ": ", deflate::error());
             exit(1);
         }
         let same = plain.len == data.len && deflate::crc32(plain) == deflate::crc32(data);

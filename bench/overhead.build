@@ -1,0 +1,2 @@
+c_headers = ["direct.h"];
+exclude = ["data"];

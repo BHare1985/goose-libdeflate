@@ -1,0 +1,108 @@
+# Build the Goose module and pinned libdeflate submodule with every platform
+# compiler shipped by Goose. Upstream CMake supplies CPU feature checks and
+# runtime dispatch; unlike ISA-L, the build does not need nasm.
+name: ci
+
+on:
+  push:
+    paths-ignore: &docs
+      - "**.md"
+      - "docs/**"
+      - LICENSE
+      - .gitignore
+  pull_request:
+    paths-ignore: *docs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            os: ubuntu-24.04
+            goose: goose-v2026.4-linux-x64.tar.gz
+          - name: macos-x64
+            os: macos-15-intel
+            goose: goose-v2026.4-macos-x64.tar.gz
+          - name: macos-arm64
+            os: macos-15
+            goose: goose-v2026.4-macos-arm64.tar.gz
+          - name: windows-x64
+            os: windows-latest
+            goose: goose-v2026.4-windows-x64.zip
+    steps:
+      # Avoid checkout converting LF sources to CRLF: Goose's formatter checks
+      # repository bytes, and the Windows release uses the same canonical LF.
+      - name: Preserve LF line endings on Windows
+        if: runner.os == 'Windows'
+        shell: bash
+        run: git config --global core.autocrlf false
+
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Install Goose
+        shell: bash
+        env:
+          ASSET: ${{ matrix.goose }}
+        run: |
+          set -euo pipefail
+          tag=$(sed -n 's/.*goose-\(v[0-9.]*\)-.*/\1/p' <<< "$ASSET")
+          url="https://github.com/aardappel/goose/releases/download/$tag/$ASSET"
+          mkdir -p "$RUNNER_TEMP/goose"
+          curl -fsSL --proto '=https' --tlsv1.2 "$url" -o "$RUNNER_TEMP/$ASSET"
+          if [[ "$ASSET" == *.zip ]]; then
+            unzip -q -o "$RUNNER_TEMP/$ASSET" -d "$RUNNER_TEMP/goose"
+          else
+            tar -xzf "$RUNNER_TEMP/$ASSET" -C "$RUNNER_TEMP/goose"
+          fi
+          bin=$(find "$RUNNER_TEMP/goose" -maxdepth 3 \( -name goose -o -name goose.exe \) -type f | head -1)
+          test -n "$bin"
+          chmod +x "$bin" 2>/dev/null || true
+          echo "$(dirname "$bin")" >> "$GITHUB_PATH"
+          "$bin" version
+
+      # Goose's .build sidecar configures CMake for the submodule and native
+      # adapter. Cache the package build products by all build inputs.
+      - name: Cache Goose native build
+        uses: actions/cache@v6
+        with:
+          path: ~/.goose/build
+          key: native-${{ matrix.name }}-${{ hashFiles('deflate.build', 'deflate.goose', 'CMakeLists.txt', '.gitmodules', 'include/**', 'src/**', 'vendor/libdeflate/**') }}
+          restore-keys: native-${{ matrix.name }}-
+
+      - name: Typecheck package
+        shell: bash
+        run: goose check deflate.goose
+
+      - name: Format check
+        shell: bash
+        run: goose format --check deflate.goose test examples bench
+
+      - name: Contract tests (in-process, debug, optimized)
+        shell: bash
+        run: bash test/run_tests.sh
+
+      - name: Typecheck examples
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in examples/*.goose; do
+            echo "== $f"
+            goose check "$f"
+          done
+
+      # The interop script uses /dev/urandom and the host gzip, so keep it on
+      # Linux. All platforms still compile and execute Goose against libdeflate.
+      - name: Independent interoperability (Python zlib and gzip)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: bash test/interop.sh
