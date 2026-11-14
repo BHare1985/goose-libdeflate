@@ -7,7 +7,7 @@
 import deflate from "..";
 import std;
 
-var checks: i64 = 0;
+var checks:   i64 = 0;
 var failures: i64 = 0;
 
 fn check(ok: bool, what: const u8[:]) {
@@ -16,6 +16,60 @@ fn check(ok: bool, what: const u8[:]) {
         failures++;
         print("FAIL: ", what);
     }
+}
+
+// The test helpers retain the named reason for assertions while checking the
+// public bool/status contract on every call.
+fn observed_status(ok: bool) -> deflate::Status {
+    let status = deflate::status();
+    check(ok == (status == deflate::Status.Ok), "bool result agrees with status()");
+    return status;
+}
+
+fn decompress_status(out: u8[>..]&, data: const u8[:], format: deflate::Format,
+                     max_size: i64 = deflate::DEFAULT_MAX_SIZE) -> deflate::Status {
+    return observed_status(deflate::decompress(out, data, format, max_size));
+}
+
+fn decompress_status(d: const deflate::Decompressor&, out: u8[>..]&, data: const u8[:],
+                     format: deflate::Format, max_size: i64 = deflate::DEFAULT_MAX_SIZE) -> deflate::Status {
+    return observed_status(deflate::decompress(d, out, data, format, max_size));
+}
+
+fn decompress_status(d: const deflate::Decompressor&, out: u8[>..]&, data: const u8[:],
+                     format: deflate::Format, info: deflate::Info&,
+                     max_size: i64 = deflate::DEFAULT_MAX_SIZE) -> deflate::Status {
+    return observed_status(deflate::decompress(d, out, data, format, info, max_size));
+}
+
+fn decompress_into_status(d: const deflate::Decompressor&, out: u8[:], data: const u8[:],
+                          format: deflate::Format, info: deflate::Info&) -> deflate::Status {
+    return observed_status(deflate::decompress_into(d, out, data, format, info));
+}
+
+fn decompress_exact_status(d: const deflate::Decompressor&, out: u8[>..]&, data: const u8[:],
+                           format: deflate::Format, size: i64, info: deflate::Info&) -> deflate::Status {
+    return observed_status(deflate::decompress_exact(d, out, data, format, size, info));
+}
+
+fn compress_count(out: u8[>..]&, data: const u8[:], format: deflate::Format,
+                  level: i32 = deflate::DEFAULT_LEVEL) -> i64 {
+    let start = out.len;
+    let ok = deflate::compress(out, data, format, level);
+    check(observed_status(ok) == deflate::Status.Ok, "compress succeeds");
+    return out.len - start;
+}
+
+fn new_compressor(level: i32 = deflate::DEFAULT_LEVEL) -> deflate::Compressor {
+    let c, ok = deflate::compressor(level);
+    check(observed_status(ok) == deflate::Status.Ok, "reusable compressor opens");
+    return c;
+}
+
+fn new_decompressor() -> deflate::Decompressor {
+    let d, ok = deflate::decompressor();
+    check(observed_status(ok) == deflate::Status.Ok, "reusable decompressor opens");
+    return d;
 }
 
 fn same(a: const u8[:], b: const u8[:]) -> bool {
@@ -89,8 +143,8 @@ fn test_known_streams() {
             Gzip => HELLO_GZIP,
         };
         var out: u8[>..] = [];
-        let status = deflate::decompress(out, stream, f);
-        check(status == deflate::SUCCESS, str("decompress known ", format_name(f), " stream"));
+        let status = decompress_status(out, stream, f);
+        check(status == deflate::Status.Ok, str("decompress known ", format_name(f), " stream"));
         check(same(out, HELLO), str("known ", format_name(f), " stream's content"));
     }
 }
@@ -101,35 +155,35 @@ fn roundtrip(data: const u8[:], level: i32, f: deflate::Format, what: const u8[:
     let name = str(what, " ", format_name(f), " level ", level, " size ", data.len);
 
     var packed: u8[>..] = [];
-    let n = deflate::compress(packed, data, f, level);
+    let n = compress_count(packed, data, f, level);
     check(n == packed.len, str(name, ": compress returns the bytes appended"));
 
-    var c = deflate::compressor(level);
+    var c = new_compressor(level);
     check(n <= deflate::compress_bound(c, data.len, f), str(name, ": within compress_bound"));
     deflate::close(c);
 
     var plain: u8[>..] = [];
     var info = deflate::Info { 0, 0 };
-    var d = deflate::decompressor();
-    let status = deflate::decompress(d, plain, packed, f, info);
+    var d = new_decompressor();
+    let status = decompress_status(d, plain, packed, f, info);
     deflate::close(d);
-    check(status == deflate::SUCCESS, str(name, ": decompress"));
+    check(status == deflate::Status.Ok, str(name, ": decompress"));
     check(same(plain, data), str(name, ": same bytes back"));
     check(info.in_nbytes == packed.len, str(name, ": the stream is all the input"));
     check(info.out_nbytes == data.len, str(name, ": info.out_nbytes"));
 
     // With the size known.
     var exact: u8[>..] = [];
-    var d2 = deflate::decompressor();
-    let status2 = deflate::decompress_exact(d2, exact, packed, f, data.len, info);
+    var d2 = new_decompressor();
+    let status2 = decompress_exact_status(d2, exact, packed, f, data.len, info);
     deflate::close(d2);
-    check(status2 == deflate::SUCCESS, str(name, ": decompress_exact"));
+    check(status2 == deflate::Status.Ok, str(name, ": decompress_exact"));
     check(same(exact, data), str(name, ": decompress_exact bytes"));
 }
 
 fn test_roundtrips() {
     var empty: u8[>..] = [];
-    var one: u8[>..] = [];
+    var one:   u8[>..] = [];
     one.push(42);
     var small: u8[>..] = [];
     text(small, 100, 2);
@@ -194,37 +248,37 @@ fn test_appending() {
     // compress appends after what `out` holds.
     var out: u8[>..] = [];
     out.append("PREFIX");
-    let n = deflate::compress(out, data, deflate::Format.Zlib);
+    let n = compress_count(out, data, deflate::Format.Zlib);
     check(out.len == 6 + n, "compress appends");
     check(same(out[..6], "PREFIX"), "compress leaves the prefix alone");
 
     // so does decompress, whose input is a slice of the same kind of buffer.
     var plain: u8[>..] = [];
     plain.append("HEAD:");
-    let status = deflate::decompress(plain, out[6..], deflate::Format.Zlib);
-    check(status == deflate::SUCCESS, "decompress after a prefix");
+    let status = decompress_status(plain, out[6..], deflate::Format.Zlib);
+    check(status == deflate::Status.Ok, "decompress after a prefix");
     check(same(plain[..5], "HEAD:"), "decompress leaves the prefix alone");
     check(same(plain[5..], data), "decompress appends");
 
     // A failure leaves `out` as it was.
     var kept: u8[>..] = [];
     kept.append("KEEP");
-    let bad = deflate::decompress(kept, "this is not compressed data", deflate::Format.Zlib);
-    check(bad == deflate::BAD_DATA, "garbage is BAD_DATA");
+    let bad = decompress_status(kept, "this is not compressed data", deflate::Format.Zlib);
+    check(bad == deflate::Status.BadData, "garbage is BAD_DATA");
     check(same(kept, "KEEP"), "a failed decompress leaves out as it was");
 }
 
 fn test_reuse() {
-    var c = deflate::compressor(9);
-    var d = deflate::decompressor();
+    var c = new_compressor(9);
+    var d = new_decompressor();
     for i in 20 {
         var data: u8[>..] = [];
         text(data, 1000 + i * 3000, 100 + i as! u64);
         var packed: u8[>..] = [];
         deflate::compress(c, packed, data, deflate::Format.Gzip);
         var plain: u8[>..] = [];
-        let status = deflate::decompress(d, plain, packed, deflate::Format.Gzip);
-        check(status == deflate::SUCCESS && same(plain, data), "reused handles");
+        let status = decompress_status(d, plain, packed, deflate::Format.Gzip);
+        check(status == deflate::Status.Ok && same(plain, data), "reused handles");
     }
     deflate::close(c);
     deflate::close(d);
@@ -248,8 +302,8 @@ fn test_bad_data() {
         // Cut short at a few places.
         for keep in [0, 1, 2, 5, packed.len / 2, packed.len - 1] {
             var out: u8[>..] = [];
-            let status = deflate::decompress(out, packed[..keep], f);
-            check(status != deflate::SUCCESS, str(name, " cut to ", keep, " bytes fails"));
+            let status = decompress_status(out, packed[..keep], f);
+            check(status != deflate::Status.Ok, str(name, " cut to ", keep, " bytes fails"));
             check(out.len == 0, str(name, " cut to ", keep, " bytes leaves out empty"));
         }
 
@@ -258,7 +312,7 @@ fn test_bad_data() {
             var bent = copy(packed);
             bent[bent.len - 1] ^= 0x55;
             var out: u8[>..] = [];
-            check(deflate::decompress(out, bent, f) == deflate::BAD_DATA,
+            check(decompress_status(out, bent, f) == deflate::Status.BadData,
                   str(name, " with a bad checksum is BAD_DATA"));
         }
     }
@@ -269,9 +323,9 @@ fn test_bad_data() {
     var zl: u8[>..] = [];
     deflate::compress(zl, data, deflate::Format.Zlib);
     var out: u8[>..] = [];
-    check(deflate::decompress(out, gz, deflate::Format.Zlib) == deflate::BAD_DATA, "gzip as zlib");
-    check(deflate::decompress(out, zl, deflate::Format.Gzip) == deflate::BAD_DATA, "zlib as gzip");
-    check(deflate::decompress(out, "", deflate::Format.Gzip) == deflate::BAD_DATA, "nothing as gzip");
+    check(decompress_status(out, gz, deflate::Format.Zlib) == deflate::Status.BadData, "gzip as zlib");
+    check(decompress_status(out, zl, deflate::Format.Gzip) == deflate::Status.BadData, "zlib as gzip");
+    check(decompress_status(out, "", deflate::Format.Gzip) == deflate::Status.BadData, "nothing as gzip");
     check(out.len == 0, "out untouched by the failures");
 
     // Every single flipped bit in a short stream either fails or decodes to
@@ -281,8 +335,8 @@ fn test_bad_data() {
         var bent = copy(HELLO_ZLIB);
         bent[i / 8] ^= (1 << (i % 8)) as! u8;
         var o: u8[>..] = [];
-        let status = deflate::decompress(o, bent, deflate::Format.Zlib);
-        check(status != deflate::SUCCESS || !same(o, HELLO), "a flipped bit never decodes as the original");
+        let status = decompress_status(o, bent, deflate::Format.Zlib);
+        check(status != deflate::Status.Ok || !same(o, HELLO), "a flipped bit never decodes as the original");
     }
 }
 
@@ -296,30 +350,38 @@ fn test_limits() {
     check(packed.len < 20000, "eight million zeros are a few thousand bytes");
 
     var out: u8[>..] = [];
-    check(deflate::decompress(out, packed, deflate::Format.Gzip) == deflate::SUCCESS, "default max_size");
+    check(decompress_status(out, packed, deflate::Format.Gzip) == deflate::Status.Ok, "default max_size");
     check(out.len == 8000000, "the whole 8000000 bytes");
 
     var capped: u8[>..] = [];
-    let status = deflate::decompress(capped, packed, deflate::Format.Gzip, 1000000);
-    check(status == deflate::INSUFFICIENT_SPACE, "max_size below the size is INSUFFICIENT_SPACE");
+    let status = decompress_status(capped, packed, deflate::Format.Gzip, 1000000);
+    check(status == deflate::Status.InsufficientSpace, "max_size below the size is INSUFFICIENT_SPACE");
     check(capped.len == 0, "and out is as it was");
-    check(deflate::decompress(capped, packed, deflate::Format.Gzip, 8000000) == deflate::SUCCESS,
+    check(decompress_status(capped, packed, deflate::Format.Gzip, 8000000) == deflate::Status.Ok,
           "max_size exactly the size succeeds");
     check(capped.len == 8000000, "exactly the size");
     var capped2: u8[>..] = [];
-    check(deflate::decompress(capped2, packed, deflate::Format.Gzip, 7999999) == deflate::INSUFFICIENT_SPACE,
+    check(decompress_status(capped2, packed, deflate::Format.Gzip, 7999999) == deflate::Status.InsufficientSpace,
           "max_size one below the size fails");
+    check(decompress_status(capped2, packed, deflate::Format.Gzip, -1) == deflate::Status.InvalidArgument,
+          "negative max_size is INVALID_ARGUMENT");
+    check(capped2.len == 0, "invalid max_size leaves the builder unchanged");
 
     // decompress_exact is exact in both directions.
-    var d = deflate::decompressor();
+    var d = new_decompressor();
     var info = deflate::Info { 0, 0 };
     var e: u8[>..] = [];
-    check(deflate::decompress_exact(d, e, packed, deflate::Format.Gzip, 8000000, info) == deflate::SUCCESS,
+    check(decompress_exact_status(d, e, packed, deflate::Format.Gzip, 8000000, info) == deflate::Status.Ok,
           "decompress_exact with the size");
-    check(deflate::decompress_exact(d, e, packed, deflate::Format.Gzip, 8000001, info) == deflate::SHORT_OUTPUT,
+    check(decompress_exact_status(d, e, packed, deflate::Format.Gzip, 8000001, info) == deflate::Status.ShortOutput,
           "decompress_exact with a size too large is SHORT_OUTPUT");
-    check(deflate::decompress_exact(d, e, packed, deflate::Format.Gzip, 7999999, info) == deflate::INSUFFICIENT_SPACE,
+    check(info.in_nbytes == packed.len && info.out_nbytes == data.len,
+          "ShortOutput still reports actual decoded counts");
+    check(decompress_exact_status(d, e, packed, deflate::Format.Gzip, 7999999, info) == deflate::Status.InsufficientSpace,
           "decompress_exact with a size too small is INSUFFICIENT_SPACE");
+    check(decompress_exact_status(d, e, packed, deflate::Format.Gzip, -1, info) == deflate::Status.InvalidArgument,
+          "decompress_exact with a negative size is INVALID_ARGUMENT");
+    check(info.in_nbytes == 0 && info.out_nbytes == 0, "invalid exact size clears info");
     check(e.len == 8000000, "decompress_exact left only the successful result in out");
     deflate::close(d);
 }
@@ -343,16 +405,16 @@ fn test_trailing_and_concatenated() {
         both.append(pb);
         both.append("trailing");
 
-        var d = deflate::decompressor();
+        var d = new_decompressor();
         var info = deflate::Info { 0, 0 };
         var first: u8[>..] = [];
-        check(deflate::decompress(d, first, both, f, info) == deflate::SUCCESS, "first stream");
+        check(decompress_status(d, first, both, f, info) == deflate::Status.Ok, "first stream");
         check(same(first, a), "first stream's bytes");
         check(info.in_nbytes == pa.len, str(format_name(f), ": first stream's length"));
 
         var second: u8[>..] = [];
         let rest = both[info.in_nbytes..];
-        check(deflate::decompress(d, second, rest, f, info) == deflate::SUCCESS, "second stream");
+        check(decompress_status(d, second, rest, f, info) == deflate::Status.Ok, "second stream");
         check(same(second, b), "second stream's bytes");
         check(info.in_nbytes == pb.len, str(format_name(f), ": second stream's length"));
         check(same(rest[info.in_nbytes..], "trailing"), "what follows the streams");
@@ -383,17 +445,17 @@ let HELLO_ZLIB_DICT: u8[] = [
 
 fn test_format_details() {
     var out: u8[>..] = [];
-    check(deflate::decompress(out, HELLO_GZIP_FULL, deflate::Format.Gzip) == deflate::SUCCESS,
+    check(decompress_status(out, HELLO_GZIP_FULL, deflate::Format.Gzip) == deflate::Status.Ok,
           "gzip with extra, name, comment and header crc");
     check(same(out, HELLO), "gzip with every header field: content");
 
     var stored: u8[>..] = [];
-    check(deflate::decompress(stored, HELLO_STORED, deflate::Format.Deflate) == deflate::SUCCESS,
+    check(decompress_status(stored, HELLO_STORED, deflate::Format.Deflate) == deflate::Status.Ok,
           "stored block");
     check(same(stored, HELLO), "stored block: content");
 
     var dict: u8[>..] = [];
-    check(deflate::decompress(dict, HELLO_ZLIB_DICT, deflate::Format.Zlib) == deflate::BAD_DATA,
+    check(decompress_status(dict, HELLO_ZLIB_DICT, deflate::Format.Zlib) == deflate::Status.BadData,
           "zlib with a preset dictionary is BAD_DATA");
     check(dict.len == 0, "and out is untouched");
 
@@ -403,7 +465,7 @@ fn test_format_details() {
     var bent = copy(HELLO_GZIP_FULL);
     bent[34] ^= 1;
     var o2: u8[>..] = [];
-    check(deflate::decompress(o2, bent, deflate::Format.Gzip) == deflate::SUCCESS && same(o2, HELLO),
+    check(decompress_status(o2, bent, deflate::Format.Gzip) == deflate::Status.Ok && same(o2, HELLO),
           "a gzip header crc that is wrong is not checked");
 }
 
@@ -447,7 +509,7 @@ fn test_deterministic() {
         deflate::compress(b, data, deflate::Format.Gzip, level as! i32);
         check(same(a, b), str("level ", level, " twice"));
 
-        var c = deflate::compressor(level as! i32);
+        var c = new_compressor(level as! i32);
         var other: u8[>..] = [];
         noise(other, 50000, 31);
         var scratch: u8[>..] = [];
@@ -474,15 +536,15 @@ fn test_offsets() {
         buf.append(packed);
         buf.append("tail");
         var out: u8[>..] = [];
-        let status = deflate::decompress(out, buf[off..], deflate::Format.Zlib);
-        check(status == deflate::SUCCESS && same(out, data), str("stream at offset ", off));
+        let status = decompress_status(out, buf[off..], deflate::Format.Zlib);
+        check(status == deflate::Status.Ok && same(out, data), str("stream at offset ", off));
 
         // The data to compress starting `off` bytes into a buffer, ending early.
         var packed2: u8[>..] = [];
         deflate::compress(packed2, data[off..9000 - off], deflate::Format.Zlib);
         var back: u8[>..] = [];
-        let status2 = deflate::decompress(back, packed2, deflate::Format.Zlib);
-        check(status2 == deflate::SUCCESS && same(back, data[off..9000 - off]), str("data at offset ", off));
+        let status2 = decompress_status(back, packed2, deflate::Format.Zlib);
+        check(status2 == deflate::Status.Ok && same(back, data[off..9000 - off]), str("data at offset ", off));
     }
 }
 
@@ -491,30 +553,35 @@ fn test_offsets() {
 fn test_zero_max_size() {
     // An empty stream decompresses to nothing, which fits in nothing.
     for f in FORMATS {
-        var empty: u8[>..] = [];
+        var empty:  u8[>..] = [];
         var packed: u8[>..] = [];
         deflate::compress(packed, empty, f);
         var out: u8[>..] = [];
-        check(deflate::decompress(out, packed, f, 0) == deflate::SUCCESS, str(format_name(f), ": empty into 0"));
+        check(decompress_status(out, packed, f, 0) == deflate::Status.Ok, str(format_name(f), ": empty into 0"));
         check(out.len == 0, "and gives nothing");
 
         packed.resize(0);
         deflate::compress(packed, "x", f);
-        check(deflate::decompress(out, packed, f, 0) == deflate::INSUFFICIENT_SPACE,
+        check(decompress_status(out, packed, f, 0) == deflate::Status.InsufficientSpace,
               str(format_name(f), ": one byte into 0"));
-        check(deflate::decompress(out, packed, f, 1) == deflate::SUCCESS, str(format_name(f), ": one byte into 1"));
+        check(decompress_status(out, packed, f, 1) == deflate::Status.Ok, str(format_name(f), ": one byte into 1"));
         check(same(out, "x"), "and gives it");
     }
 }
 
 // Failure leaves info zeroed, so that it can't be mistaken for a result.
 fn test_info_on_failure() {
-    var d = deflate::decompressor();
+    var d = new_decompressor();
     var info = deflate::Info { 99, 99 };
     var out: u8[>..] = [];
-    check(deflate::decompress(d, out, "garbage garbage garbage", deflate::Format.Gzip, info) == deflate::BAD_DATA,
+    check(decompress_status(d, out, "garbage garbage garbage", deflate::Format.Gzip, info) == deflate::Status.BadData,
           "garbage");
     check(info.in_nbytes == 0 && info.out_nbytes == 0, "info is zero after a failure");
+    info.in_nbytes = 99;
+    info.out_nbytes = 99;
+    check(decompress_status(d, out, "", deflate::Format.Gzip, info, -1) == deflate::Status.InvalidArgument,
+          "negative max_size is rejected before decoding");
+    check(info.in_nbytes == 0 && info.out_nbytes == 0, "invalid max_size clears info");
     deflate::close(d);
 }
 
@@ -572,8 +639,8 @@ fn test_random_roundtrips() {
         var packed: u8[>..] = [];
         deflate::compress(packed, data, f, level);
         var plain: u8[>..] = [];
-        let status = deflate::decompress(plain, packed, f);
-        if status != deflate::SUCCESS || !same(plain, data) {
+        let status = decompress_status(plain, packed, f);
+        if status != deflate::Status.Ok || !same(plain, data) {
             print("random case ", i, ": ", format_name(f), " level ", level, " size ", data.len);
             c++;
         }
@@ -587,7 +654,7 @@ fn test_random_roundtrips() {
 // decode to the wrong data, since its checksum covers it.
 fn test_random_damage() {
     var r = rng { 777 };
-    var d = deflate::decompressor();
+    var d = new_decompressor();
     var wrong: i64 = 0;
     for i in 600 {
         var data: u8[>..] = [];
@@ -602,8 +669,8 @@ fn test_random_damage() {
         }
         var out: u8[>..] = [];
         out.append("keep");
-        let status = deflate::decompress(d, out, bent, f);
-        if status != deflate::SUCCESS {
+        let status = decompress_status(d, out, bent, f);
+        if status != deflate::Status.Ok {
             if !same(out, "keep") { wrong++; }
         } else {
             if f == deflate::Format.Zlib && bent[0] == packed[0] && bent[1] == packed[1] && !same(out[4..], data) {
@@ -616,7 +683,7 @@ fn test_random_damage() {
         noise(junk, r.rand_int(2000), r.rand_u64());
         var o2: u8[>..] = [];
         o2.append("keep");
-        if deflate::decompress(d, o2, junk, f) != deflate::SUCCESS && !same(o2, "keep") { wrong++; }
+        if decompress_status(d, o2, junk, f) != deflate::Status.Ok && !same(o2, "keep") { wrong++; }
     }
     deflate::close(d);
     check(wrong == 0, "damaged streams fail cleanly or decode correctly");
@@ -629,36 +696,41 @@ fn test_into() {
     text(data, 60000, 60);
 
     for f in FORMATS {
-        var c = deflate::compressor(6);
-        var d = deflate::decompressor();
+        var c = new_compressor(6);
+        var d = new_decompressor();
         let bound = deflate::compress_bound(c, data.len, f);
 
         // The same bytes as the appending call gives.
         var buf: u8[>..] = [];
         buf.resize(bound, 0);
-        let n = deflate::compress_into(c, buf, data, f);
+        let n, n_ok = deflate::compress_into(c, buf, data, f);
+        check(observed_status(n_ok) == deflate::Status.Ok, str(format_name(f), ": compress_into status"));
         var appended: u8[>..] = [];
-        deflate::compress(c, appended, data, f);
+        check(deflate::compress(c, appended, data, f), str(format_name(f), ": append compress"));
         check(n > 0 && same(buf[..n], appended), str(format_name(f), ": compress_into"));
 
         // A buffer that is too small gives 0, one byte short included.
         var small: u8[>..] = [];
         small.resize(n - 1, 0);
-        check(deflate::compress_into(c, small, data, f) == 0, str(format_name(f), ": one byte short"));
+        let short_n, short_ok = deflate::compress_into(c, small, data, f);
+        check(!short_ok && short_n == 0 && deflate::status() == deflate::Status.InsufficientSpace,
+              str(format_name(f), ": one byte short"));
         small.resize(n, 0);
-        check(deflate::compress_into(c, small, data, f) == n, str(format_name(f), ": exactly enough"));
+        let exact_n, exact_ok = deflate::compress_into(c, small, data, f);
+        check(exact_ok && exact_n == n && deflate::status() == deflate::Status.Ok,
+              str(format_name(f), ": exactly enough"));
 
         // Decompressing into a buffer bigger than needed, exact, and too small.
         var out: u8[>..] = [];
         out.resize(data.len + 100, 0);
         var info = deflate::Info { 0, 0 };
-        check(deflate::decompress_into(d, out, appended, f, info) == deflate::SUCCESS, "decompress_into");
+        check(decompress_into_status(d, out, appended, f, info) == deflate::Status.Ok, "decompress_into");
         check(info.out_nbytes == data.len && same(out[..info.out_nbytes], data), "decompress_into: result");
         check(info.in_nbytes == appended.len, "decompress_into: info.in_nbytes");
         out.resize(data.len);
-        check(deflate::decompress_into(d, out, appended, f, info) == deflate::SUCCESS, "exactly enough room");
+        check(decompress_into_status(d, out, appended, f, info) == deflate::Status.Ok, "exactly enough room");
         out.resize(data.len - 1);
-        check(deflate::decompress_into(d, out, appended, f, info) == deflate::INSUFFICIENT_SPACE,
+        check(decompress_into_status(d, out, appended, f, info) == deflate::Status.InsufficientSpace,
               "one byte short of room");
 
         // The buffers can be used again.
@@ -667,10 +739,11 @@ fn test_into() {
             text(more, 1000 * (i + 1), 70 + i as! u64);
             var big: u8[>..] = [];
             big.resize(deflate::compress_bound(c, more.len, f), 0);
-            let m = deflate::compress_into(c, big, more, f);
+            let m, m_ok = deflate::compress_into(c, big, more, f);
+            check(observed_status(m_ok) == deflate::Status.Ok, "reused compress_into succeeds");
             var back: u8[>..] = [];
             back.resize(more.len, 0);
-            check(deflate::decompress_into(d, back, big[..m], f, info) == deflate::SUCCESS && same(back, more),
+            check(decompress_into_status(d, back, big[..m], f, info) == deflate::Status.Ok && same(back, more),
                   "reused buffers");
         }
         deflate::close(c);
@@ -682,7 +755,39 @@ fn test_misc() {
     let major, minor = deflate::native_version();
     check(major == deflate::VERSION_MAJOR && minor == deflate::VERSION_MINOR,
           "the C layer is the version the module says");
-    check(deflate::status_name(deflate::BAD_DATA) == "bad data", "status_name");
+    check(deflate::status_name(deflate::Status.BadData) == "bad data", "status_name");
+    check(deflate::status_name(deflate::Status.Other) == "libdeflate reported an unknown error", "other status_name");
+
+    let bad_level, bad_level_ok = deflate::compressor(-1);
+    check(!bad_level_ok && bad_level.handle == 0 && deflate::status() == deflate::Status.BadLevel,
+          "compressor rejects a level below the range without aborting");
+    check(deflate::error() == "compression level must be 0..12", "error text follows the last failure");
+    let high_level, high_level_ok = deflate::compressor(13);
+    check(!high_level_ok && high_level.handle == 0 && deflate::status() == deflate::Status.BadLevel,
+          "compressor rejects a level above the range without aborting");
+    var unchanged: u8[>..] = [];
+    unchanged.append("keep");
+    let no_bytes = deflate::compress(unchanged, "hello", deflate::Format.Gzip, 13);
+    check(!no_bytes && deflate::status() == deflate::Status.BadLevel && same(unchanged, "keep"),
+          "compress reports invalid level without changing the builder");
+    var safe_packed: u8[>..] = [];
+    let safe_ok = deflate::compress(safe_packed, "hello", deflate::Format.Gzip, 6);
+    var safe_plain: u8[>..] = [];
+    check(safe_ok && deflate::status() == deflate::Status.Ok &&
+          deflate::decompress(safe_plain, safe_packed, deflate::Format.Gzip) &&
+          deflate::status() == deflate::Status.Ok && same(safe_plain, "hello"),
+          "one-shot bool operations succeed and round-trip");
+    let c, c_ok = deflate::compressor(6);
+    check(c_ok && c.handle != 0 && deflate::status() == deflate::Status.Ok && deflate::error() == "",
+          "success clears the previous error");
+    check(deflate::compress_bound(c, -1, deflate::Format.Gzip) == 0 &&
+          deflate::status() == deflate::Status.InvalidArgument,
+          "negative input size has no compression bound");
+    defer deflate::close(c);
+
+    let d, d_ok = deflate::decompressor();
+    check(d_ok && d.handle != 0, "decompressor allocates a valid context");
+    defer deflate::close(d);
 }
 
 fn main() {

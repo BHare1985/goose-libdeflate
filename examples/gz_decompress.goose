@@ -24,16 +24,21 @@ fn main() {
     let t = packed[packed.len - 4..];
     let size = t[0] | (t[1] as i64) << 8 | (t[2] as i64) << 16 | (t[3] as i64) << 24;
 
-    var d = deflate::decompressor();
+    let d, opened = deflate::decompressor();
+    guard opened else {
+        write_stderr(str("decompressor allocation failed: ", deflate::error(), "\n"));
+        exit(1);
+    }
+    defer deflate::close(d);
     var plain: u8[>..] = [];
     var info = deflate::Info { 0, 0 };
-    var status = deflate::decompress_exact(d, plain, packed, deflate::Format.Gzip, size, info);
-    if status == deflate::SHORT_OUTPUT || status == deflate::INSUFFICIENT_SPACE {
-        status = deflate::decompress(d, plain, packed, deflate::Format.Gzip, info);
+    var ok = deflate::decompress_exact(d, plain, packed, deflate::Format.Gzip, size, info);
+    if !ok && (deflate::status() == deflate::Status.ShortOutput ||
+               deflate::status() == deflate::Status.InsufficientSpace) {
+        ok = deflate::decompress(d, plain, packed, deflate::Format.Gzip, info);
     }
-    deflate::close(d);
-    if status != deflate::SUCCESS {
-        write_stderr(str("not a good gzip file: ", deflate::status_name(status), "\n"));
+    guard ok else {
+        write_stderr(str("not a good gzip file: ", deflate::error(), "\n"));
         exit(1);
     }
     if !write_file(a[2], plain) { write_stderr("cannot write the output\n"); exit(1); }

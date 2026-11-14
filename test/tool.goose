@@ -22,11 +22,13 @@ fn main() {
     if a[1] == "checksum" {
         format(output, deflate::crc32(input), " ", deflate::adler32(input));
     } else if a[1] == "compress" {
-        deflate::compress(output, input, fmt, level as! i32);
+        guard deflate::compress(output, input, fmt, level as! i32) else {
+            write_stderr(str("compress failed: ", deflate::error(), "\n"));
+            exit(1);
+        }
     } else {
-        let status = deflate::decompress(output, input, fmt);
-        if status != deflate::SUCCESS {
-            write_stderr(str("decompress failed: ", deflate::status_name(status), "\n"));
+        guard deflate::decompress(output, input, fmt) else {
+            write_stderr(str("decompress failed: ", deflate::error(), "\n"));
             exit(1);
         }
     }

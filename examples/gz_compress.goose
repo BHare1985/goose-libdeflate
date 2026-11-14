@@ -26,7 +26,10 @@ fn main() {
     if !read_file(a[1], data) { write_stderr("cannot read the input\n"); exit(1); }
 
     var packed: u8[>..] = [];
-    deflate::compress(packed, data, deflate::Format.Gzip, level);
+    guard deflate::compress(packed, data, deflate::Format.Gzip, level) else {
+        write_stderr(str("compress failed: ", deflate::error(), "\n"));
+        exit(1);
+    }
     if !write_file(a[2], packed) { write_stderr("cannot write the output\n"); exit(1); }
     print(data.len, " -> ", packed.len, " bytes");
 }
