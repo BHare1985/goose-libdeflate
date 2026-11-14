@@ -32,9 +32,9 @@ buffers and zlib-format output:
 | | zlib | libdeflate | Speedup |
 |---|---:|---:|---:|
 | compress, level 6 | 26 MB/s | 79 MB/s | 3.0x |
-| compress, level 1 | 101 MB/s | 218 MB/s | 2.2x |
-| decompress, level 6 | 340 MB/s | 919 MB/s | 2.7x |
-| CRC-32 | 4.3 GB/s | 12.3 GB/s | 2.8x |
+| compress, level 1 | 101 MB/s | 209 MB/s | 2.1x |
+| decompress, level 6 | 340 MB/s | 916 MB/s | 2.7x |
+| CRC-32 | 4.3 GB/s | 12.0 GB/s | 2.8x |
 
 libdeflate also produced smaller output on this corpus: 1.78 MB versus zlib's
 1.79 MB at level 6, and 1.74 MB versus 1.78 MB at level 9. Levels 10–12 search

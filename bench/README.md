@@ -61,15 +61,15 @@ The inputs include deterministic synthetic read-like data and pseudorandom
 bytes at 64 B, 4 KiB, 64 KiB and 1 MiB. Compression uses level 1. The sweep
 covers raw, zlib and gzip compression/decompression plus CRC-32 and Adler-32.
 The runner currently targets GCC/Clang on Unix-like systems, not Windows.
-`overhead_results.json`
-keeps the compiler, iterations and per-case timings. On the recorded Linux x64
-run, the median Goose/direct-C time ratio across the cases was:
+`overhead_results.json` keeps the compiler, iterations and per-case timings.
+On the recorded Linux x64 run, the median Goose/direct-C time ratio across the
+cases was:
 
 | Input size | GCC 15.2 | Clang 21.1 |
 |---:|---:|---:|
-| 64 B | 1.01× | 1.00× |
-| 4 KiB | 0.99× | 1.00× |
-| 64 KiB | 0.99× | 1.00× |
+| 64 B | 0.98× | 0.99× |
+| 4 KiB | 1.00× | 0.99× |
+| 64 KiB | 1.01× | 1.00× |
 | 1 MiB | 1.00× | 1.00× |
 
 A ratio of 1.00 means equal time; above 1.00 means Goose took longer. The 64 B

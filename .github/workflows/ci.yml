@@ -38,6 +38,13 @@ jobs:
             os: windows-latest
             goose: goose-v2026.4-windows-x64.zip
     steps:
+      # Avoid checkout converting LF sources to CRLF: Goose's formatter checks
+      # repository bytes, and the Windows release uses the same canonical LF.
+      - name: Preserve LF line endings on Windows
+        if: runner.os == 'Windows'
+        shell: bash
+        run: git config --global core.autocrlf false
+
       - uses: actions/checkout@v4
         with:
           submodules: recursive

@@ -23,10 +23,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "compress",
-      "iterations": 3556,
-      "goose_ns": 8083.62879640045,
-      "direct_c_ns": 6108.51209223847,
-      "ratio": 1.32333842911952
+      "iterations": 3420,
+      "goose_ns": 8539.2716374269,
+      "direct_c_ns": 8490.75350877193,
+      "ratio": 1.0057142312051393
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -35,10 +35,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 12349,
-      "goose_ns": 1588.3666693659407,
-      "direct_c_ns": 2036.2905498420926,
-      "ratio": 0.7800294852270041
+      "iterations": 12773,
+      "goose_ns": 1718.6302356533313,
+      "direct_c_ns": 2404.5638456118377,
+      "ratio": 0.7147367863780004
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -47,10 +47,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 9091,
-      "goose_ns": 6743.009019909801,
-      "direct_c_ns": 6678.9143108568915,
-      "ratio": 1.009596576040618
+      "iterations": 8933,
+      "goose_ns": 5624.087204746445,
+      "direct_c_ns": 6176.579312660921,
+      "ratio": 0.9105504713940997
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -59,10 +59,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 12366,
-      "goose_ns": 2054.680899239851,
-      "direct_c_ns": 1735.3424712922529,
-      "ratio": 1.1840204070553273
+      "iterations": 13000,
+      "goose_ns": 1578.383923076923,
+      "direct_c_ns": 2212.2794615384614,
+      "ratio": 0.7134649805858093
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -71,10 +71,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 5901,
-      "goose_ns": 7364.735807490256,
-      "direct_c_ns": 7401.69073038468,
-      "ratio": 0.9950072322337489
+      "iterations": 7811,
+      "goose_ns": 6829.293432339009,
+      "direct_c_ns": 6329.001408270388,
+      "ratio": 1.0790475450700432
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -83,10 +83,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 12990,
-      "goose_ns": 1775.1147036181678,
-      "direct_c_ns": 2388.0314087759816,
-      "ratio": 0.7433380888939092
+      "iterations": 12448,
+      "goose_ns": 1754.7491966580976,
+      "direct_c_ns": 2369.2303984575838,
+      "ratio": 0.740641010600098
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -96,9 +96,9 @@
       "format": "raw",
       "operation": "crc32",
       "iterations": 1000000,
-      "goose_ns": 16.642977,
-      "direct_c_ns": 17.780203,
-      "ratio": 0.9360397628755981
+      "goose_ns": 8.983438,
+      "direct_c_ns": 9.068407,
+      "ratio": 0.990630217633593
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -108,9 +108,9 @@
       "format": "raw",
       "operation": "adler32",
       "iterations": 1000000,
-      "goose_ns": 12.642251,
-      "direct_c_ns": 19.094532,
-      "ratio": 0.6620875023278915
+      "goose_ns": 21.035271,
+      "direct_c_ns": 20.612056,
+      "ratio": 1.0205324010375287
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -119,10 +119,10 @@
       "data": "random",
       "format": "raw",
       "operation": "compress",
-      "iterations": 4119,
-      "goose_ns": 6135.702840495266,
-      "direct_c_ns": 7660.594804564214,
-      "ratio": 0.800943398917221
+      "iterations": 8160,
+      "goose_ns": 6482.124509803922,
+      "direct_c_ns": 6478.535784313725,
+      "ratio": 1.0005539408301
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -132,9 +132,9 @@
       "format": "raw",
       "operation": "decompress",
       "iterations": 1000000,
-      "goose_ns": 22.511442,
-      "direct_c_ns": 21.07323,
-      "ratio": 1.0682482941627838
+      "goose_ns": 20.27888,
+      "direct_c_ns": 20.578283,
+      "ratio": 0.9854505354018118
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -143,10 +143,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 6415,
-      "goose_ns": 6812.546063912705,
-      "direct_c_ns": 6359.640685892439,
-      "ratio": 1.0712155608138276
+      "iterations": 3842,
+      "goose_ns": 8001.240239458615,
+      "direct_c_ns": 7635.060385216033,
+      "ratio": 1.047960308860376
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -155,10 +155,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 696087,
-      "goose_ns": 42.55263638022259,
-      "direct_c_ns": 42.438471053187314,
-      "ratio": 1.0026901376086852
+      "iterations": 1000000,
+      "goose_ns": 34.565983,
+      "direct_c_ns": 37.243532,
+      "ratio": 0.9281070066072145
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -167,10 +167,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 3848,
-      "goose_ns": 7919.470114345115,
-      "direct_c_ns": 5204.135135135135,
-      "ratio": 1.5217648867105122
+      "iterations": 3808,
+      "goose_ns": 5199.335084033613,
+      "direct_c_ns": 8026.045693277311,
+      "ratio": 0.6478078100637558
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -179,10 +179,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 599089,
-      "goose_ns": 24.491711582085465,
-      "direct_c_ns": 38.66294490468027,
-      "ratio": 0.6334673068093337
+      "iterations": 1000000,
+      "goose_ns": 33.614214,
+      "direct_c_ns": 33.928644,
+      "ratio": 0.9907326092961452
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -192,9 +192,9 @@
       "format": "raw",
       "operation": "crc32",
       "iterations": 1000000,
-      "goose_ns": 16.405982,
-      "direct_c_ns": 9.067915,
-      "ratio": 1.809234206540313
+      "goose_ns": 16.305976,
+      "direct_c_ns": 16.733949,
+      "ratio": 0.9744248652843391
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -204,9 +204,9 @@
       "format": "raw",
       "operation": "adler32",
       "iterations": 1000000,
-      "goose_ns": 20.526663,
-      "direct_c_ns": 13.04124,
-      "ratio": 1.5739809251267516
+      "goose_ns": 20.038588,
+      "direct_c_ns": 21.394155,
+      "ratio": 0.9366384416678294
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -215,10 +215,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "compress",
-      "iterations": 1666,
-      "goose_ns": 25908.740096038415,
-      "direct_c_ns": 26210.592436974788,
-      "ratio": 0.9884835742777581
+      "iterations": 828,
+      "goose_ns": 32067.72463768116,
+      "direct_c_ns": 24668.665458937197,
+      "ratio": 1.2999375540221354
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -227,10 +227,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 3042,
-      "goose_ns": 9718.889875082183,
-      "direct_c_ns": 9624.35667324129,
-      "ratio": 1.009822287873404
+      "iterations": 3097,
+      "goose_ns": 9699.162415240555,
+      "direct_c_ns": 9797.95640942848,
+      "ratio": 0.9899168775549096
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -239,10 +239,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 970,
-      "goose_ns": 21882.161855670103,
-      "direct_c_ns": 29714.32886597938,
-      "ratio": 0.7364178391632292
+      "iterations": 1171,
+      "goose_ns": 28480.46029035013,
+      "direct_c_ns": 29083.21520068318,
+      "ratio": 0.9792748186136281
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -251,10 +251,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 2992,
-      "goose_ns": 10013.179812834225,
-      "direct_c_ns": 10039.207887700535,
-      "ratio": 0.9974073577161204
+      "iterations": 7663,
+      "goose_ns": 7993.197050763409,
+      "direct_c_ns": 7927.019052590369,
+      "ratio": 1.0083484091225206
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -264,9 +264,9 @@
       "format": "gzip",
       "operation": "compress",
       "iterations": 965,
-      "goose_ns": 30662.02901554404,
-      "direct_c_ns": 29585.156476683936,
-      "ratio": 1.0363990820771487
+      "goose_ns": 29718.467357512953,
+      "direct_c_ns": 29182.060103626944,
+      "ratio": 1.0183814046020465
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -275,10 +275,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 7415,
-      "goose_ns": 8161.578556979096,
-      "direct_c_ns": 8198.58125421443,
-      "ratio": 0.9954866950649158
+      "iterations": 2970,
+      "goose_ns": 9948.489225589226,
+      "direct_c_ns": 9797.552525252526,
+      "ratio": 1.0154055515341889
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -287,10 +287,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 71050,
-      "goose_ns": 418.06014074595356,
-      "direct_c_ns": 427.2157072484166,
-      "ratio": 0.9785692184366731
+      "iterations": 70547,
+      "goose_ns": 343.08309354047657,
+      "direct_c_ns": 417.13719931393257,
+      "ratio": 0.8224706262226118
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -299,10 +299,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 102078,
-      "goose_ns": 262.4581398538373,
-      "direct_c_ns": 260.8062951860342,
-      "ratio": 1.006333607348798
+      "iterations": 122381,
+      "goose_ns": 249.23194776967014,
+      "direct_c_ns": 233.6221880847517,
+      "ratio": 1.0668162549665687
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -311,10 +311,10 @@
       "data": "random",
       "format": "raw",
       "operation": "compress",
-      "iterations": 1818,
-      "goose_ns": 23782.50220022002,
-      "direct_c_ns": 24107.49119911991,
-      "ratio": 0.9865191696549596
+      "iterations": 2742,
+      "goose_ns": 21838.009482129833,
+      "direct_c_ns": 21781.828227571117,
+      "ratio": 1.002579271765976
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -323,10 +323,10 @@
       "data": "random",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 169808,
-      "goose_ns": 133.2303719494959,
-      "direct_c_ns": 142.69323000094224,
-      "ratio": 0.9336839032140217
+      "iterations": 234290,
+      "goose_ns": 128.5236373724871,
+      "direct_c_ns": 118.46821460583038,
+      "ratio": 1.0848786554276462
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -335,10 +335,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 1085,
-      "goose_ns": 27088.152995391705,
-      "direct_c_ns": 27462.663594470047,
-      "ratio": 0.9863629178651937
+      "iterations": 2706,
+      "goose_ns": 19263.58684405026,
+      "direct_c_ns": 19230.51662971175,
+      "ratio": 1.0017196737339555
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -347,10 +347,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 63834,
-      "goose_ns": 419.04994203715887,
-      "direct_c_ns": 400.796534762039,
-      "ratio": 1.0455428270754819
+      "iterations": 197808,
+      "goose_ns": 303.99906980506347,
+      "direct_c_ns": 303.6797753377012,
+      "ratio": 1.0010514182810075
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -359,10 +359,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 1788,
-      "goose_ns": 18718.549776286352,
-      "direct_c_ns": 19904.82774049217,
-      "ratio": 0.9404025003545957
+      "iterations": 1058,
+      "goose_ns": 27505.164461247638,
+      "direct_c_ns": 27521.20604914934,
+      "ratio": 0.9994171190073192
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -371,10 +371,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 120548,
-      "goose_ns": 464.0573547466569,
-      "direct_c_ns": 456.1217855128248,
-      "ratio": 1.0173979175866597
+      "iterations": 134956,
+      "goose_ns": 444.0948309078515,
+      "direct_c_ns": 448.37486291828446,
+      "ratio": 0.9904543444238242
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -383,10 +383,10 @@
       "data": "random",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 70698,
-      "goose_ns": 424.3108291606552,
-      "direct_c_ns": 428.75508500947694,
-      "ratio": 0.9896345116263204
+      "iterations": 176217,
+      "goose_ns": 343.55824352928494,
+      "direct_c_ns": 344.7933627289081,
+      "ratio": 0.9964177987944789
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -395,10 +395,10 @@
       "data": "random",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 306372,
-      "goose_ns": 164.64309728043034,
-      "direct_c_ns": 193.48365712271357,
-      "ratio": 0.8509405896540833
+      "iterations": 121692,
+      "goose_ns": 251.35364691187587,
+      "direct_c_ns": 248.34952996088487,
+      "ratio": 1.0120963263005336
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -407,10 +407,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "compress",
-      "iterations": 167,
-      "goose_ns": 280003.0479041916,
-      "direct_c_ns": 283978.6586826347,
-      "ratio": 0.986000318485601
+      "iterations": 168,
+      "goose_ns": 275474.70238095237,
+      "direct_c_ns": 277280.29761904763,
+      "ratio": 0.9934881949651686
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -419,10 +419,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 358,
-      "goose_ns": 95918.38268156424,
-      "direct_c_ns": 75106.43854748603,
-      "ratio": 1.277099334445473
+      "iterations": 642,
+      "goose_ns": 86526.30218068536,
+      "direct_c_ns": 75110.63395638629,
+      "ratio": 1.151984714054307
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -432,9 +432,9 @@
       "format": "zlib",
       "operation": "compress",
       "iterations": 188,
-      "goose_ns": 281747.6170212766,
-      "direct_c_ns": 277340.3989361702,
-      "ratio": 1.0158910065104534
+      "goose_ns": 280914.58510638296,
+      "direct_c_ns": 276844.7606382979,
+      "ratio": 1.0147007458573594
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -443,10 +443,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 321,
-      "goose_ns": 77320.21495327103,
-      "direct_c_ns": 86440.33956386293,
-      "ratio": 0.8944922630266409
+      "iterations": 322,
+      "goose_ns": 100508.86645962733,
+      "direct_c_ns": 97565.88198757764,
+      "ratio": 1.0301640738759927
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -455,10 +455,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 188,
-      "goose_ns": 267193.19680851063,
-      "direct_c_ns": 278077.2606382979,
-      "ratio": 0.960859569010411
+      "iterations": 187,
+      "goose_ns": 281935.6310160428,
+      "direct_c_ns": 279685.8983957219,
+      "ratio": 1.0080437828050157
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -467,10 +467,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 316,
-      "goose_ns": 95800.83227848102,
-      "direct_c_ns": 102070.33227848102,
-      "ratio": 0.9385766670878001
+      "iterations": 318,
+      "goose_ns": 101349.94339622642,
+      "direct_c_ns": 100662.67924528301,
+      "ratio": 1.006827397761476
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -479,10 +479,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 7494,
-      "goose_ns": 5653.8805711235655,
-      "direct_c_ns": 5449.644382172404,
-      "ratio": 1.037476975492068
+      "iterations": 4440,
+      "goose_ns": 4933.088063063063,
+      "direct_c_ns": 6689.166441441442,
+      "ratio": 0.7374742587508462
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -491,10 +491,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 20033,
-      "goose_ns": 3002.7644885938203,
-      "direct_c_ns": 3015.5359656566666,
-      "ratio": 0.9957647737555453
+      "iterations": 20053,
+      "goose_ns": 3045.122275968683,
+      "direct_c_ns": 2987.134693063382,
+      "ratio": 1.0194124433156488
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -503,10 +503,10 @@
       "data": "random",
       "format": "raw",
       "operation": "compress",
-      "iterations": 125,
-      "goose_ns": 403218.08,
-      "direct_c_ns": 403573.552,
-      "ratio": 0.9991191890592473
+      "iterations": 124,
+      "goose_ns": 401311.6370967742,
+      "direct_c_ns": 401611.71774193546,
+      "ratio": 0.9992528090394163
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -515,10 +515,10 @@
       "data": "random",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 12124,
-      "goose_ns": 2421.304025074233,
-      "direct_c_ns": 2442.4011052457936,
-      "ratio": 0.9913621558202507
+      "iterations": 11763,
+      "goose_ns": 2526.4724985122843,
+      "direct_c_ns": 2455.7172490011053,
+      "ratio": 1.02881245776156
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -528,9 +528,9 @@
       "format": "zlib",
       "operation": "compress",
       "iterations": 123,
-      "goose_ns": 404704.7073170732,
-      "direct_c_ns": 404368.7967479675,
-      "ratio": 1.0008307034860433
+      "goose_ns": 404572.9512195122,
+      "direct_c_ns": 404205.0243902439,
+      "ratio": 1.0009102480351977
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -539,10 +539,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 12232,
-      "goose_ns": 4313.466644865925,
-      "direct_c_ns": 4731.636935905821,
-      "ratio": 0.9116224899111282
+      "iterations": 4743,
+      "goose_ns": 6155.79063883618,
+      "direct_c_ns": 6135.757115749526,
+      "ratio": 1.00326504499913
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -552,9 +552,9 @@
       "format": "gzip",
       "operation": "compress",
       "iterations": 123,
-      "goose_ns": 405659.837398374,
-      "direct_c_ns": 405643.0569105691,
-      "ratio": 1.0000413676199285
+      "goose_ns": 406241.61788617884,
+      "direct_c_ns": 407361.76422764227,
+      "ratio": 0.9972502418247642
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -563,10 +563,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 3267,
-      "goose_ns": 6176.574839302112,
-      "direct_c_ns": 8913.372206917662,
-      "ratio": 0.6929560099048121
+      "iterations": 8296,
+      "goose_ns": 7300.296046287367,
+      "direct_c_ns": 7255.263138862102,
+      "ratio": 1.0062069295852345
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -575,10 +575,10 @@
       "data": "random",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 11240,
-      "goose_ns": 5334.455960854092,
-      "direct_c_ns": 5353.6860320284695,
-      "ratio": 0.996408068934313
+      "iterations": 4331,
+      "goose_ns": 6702.030708843224,
+      "direct_c_ns": 6547.695451396906,
+      "ratio": 1.0235709279076797
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -587,10 +587,10 @@
       "data": "random",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 8020,
-      "goose_ns": 2808.392019950125,
-      "direct_c_ns": 3655.2849127182044,
-      "ratio": 0.7683100187836525
+      "iterations": 8014,
+      "goose_ns": 3721.036436236586,
+      "direct_c_ns": 3698.4797853755927,
+      "ratio": 1.00609889797159
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -599,10 +599,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "compress",
-      "iterations": 10,
-      "goose_ns": 4180420.7,
-      "direct_c_ns": 4205426.7,
-      "ratio": 0.9940538732966145
+      "iterations": 11,
+      "goose_ns": 4212525.363636363,
+      "direct_c_ns": 4173845.4545454546,
+      "ratio": 1.009267211618673
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -611,10 +611,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 41,
-      "goose_ns": 1177685.6585365853,
-      "direct_c_ns": 1176686.487804878,
-      "ratio": 1.0008491392924646
+      "iterations": 42,
+      "goose_ns": 1172623.8333333333,
+      "direct_c_ns": 1174616.380952381,
+      "ratio": 0.9983036609642442
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -623,10 +623,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 10,
-      "goose_ns": 4256332.3,
-      "direct_c_ns": 4239387.5,
-      "ratio": 1.0039969924900707
+      "iterations": 11,
+      "goose_ns": 4339694.2727272725,
+      "direct_c_ns": 4222903.909090909,
+      "ratio": 1.027656410411078
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -635,10 +635,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 41,
-      "goose_ns": 1216233.487804878,
-      "direct_c_ns": 1214799.0487804879,
-      "ratio": 1.0011808035459282
+      "iterations": 40,
+      "goose_ns": 1215138.25,
+      "direct_c_ns": 1212891.25,
+      "ratio": 1.0018525980791766
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -648,9 +648,9 @@
       "format": "gzip",
       "operation": "compress",
       "iterations": 10,
-      "goose_ns": 4854773.6,
-      "direct_c_ns": 4284021.3,
-      "ratio": 1.1332281657889982
+      "goose_ns": 4249292.5,
+      "direct_c_ns": 4298764.5,
+      "ratio": 0.988491577056617
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -660,9 +660,9 @@
       "format": "gzip",
       "operation": "decompress",
       "iterations": 39,
-      "goose_ns": 1247963.0,
-      "direct_c_ns": 1247969.6923076923,
-      "ratio": 0.9999946374437348
+      "goose_ns": 1245057.1282051282,
+      "direct_c_ns": 1245970.923076923,
+      "ratio": 0.9992666001630776
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -671,10 +671,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 698,
-      "goose_ns": 72249.94699140401,
-      "direct_c_ns": 71931.32664756446,
-      "ratio": 1.004429507402257
+      "iterations": 684,
+      "goose_ns": 71827.98976608187,
+      "direct_c_ns": 71916.34502923976,
+      "ratio": 0.9987714161068395
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -683,10 +683,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 1194,
-      "goose_ns": 41624.66582914573,
-      "direct_c_ns": 41630.94137353434,
-      "ratio": 0.9998492576871537
+      "iterations": 1215,
+      "goose_ns": 40885.28395061728,
+      "direct_c_ns": 41119.4024691358,
+      "ratio": 0.9943063735253875
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -696,9 +696,9 @@
       "format": "raw",
       "operation": "compress",
       "iterations": 10,
-      "goose_ns": 7500069.3,
-      "direct_c_ns": 7473165.7,
-      "ratio": 1.0036000272280863
+      "goose_ns": 7497521.3,
+      "direct_c_ns": 7477106.9,
+      "ratio": 1.0027302538632956
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -707,10 +707,10 @@
       "data": "random",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 1506,
-      "goose_ns": 31186.531208499335,
-      "direct_c_ns": 33671.07304116866,
-      "ratio": 0.9262113853742782
+      "iterations": 1649,
+      "goose_ns": 32136.739842328683,
+      "direct_c_ns": 34210.88538508187,
+      "ratio": 0.9393717666349072
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -720,9 +720,9 @@
       "format": "zlib",
       "operation": "compress",
       "iterations": 10,
-      "goose_ns": 7527865.5,
-      "direct_c_ns": 7613842.0,
-      "ratio": 0.9887078691677605
+      "goose_ns": 7565637.2,
+      "direct_c_ns": 7591428.7,
+      "ratio": 0.9966025499258131
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -731,10 +731,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 641,
-      "goose_ns": 72742.71450858035,
-      "direct_c_ns": 71739.41029641185,
-      "ratio": 1.0139853980960125
+      "iterations": 692,
+      "goose_ns": 71498.59248554913,
+      "direct_c_ns": 72063.42630057804,
+      "ratio": 0.9921619905682395
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -744,9 +744,9 @@
       "format": "gzip",
       "operation": "compress",
       "iterations": 10,
-      "goose_ns": 7562664.9,
-      "direct_c_ns": 7607459.1,
-      "ratio": 0.9941118053464133
+      "goose_ns": 7614456.9,
+      "direct_c_ns": 7615286.5,
+      "ratio": 0.9998910612227131
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -755,10 +755,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 481,
-      "goose_ns": 103114.61330561331,
-      "direct_c_ns": 103133.73388773389,
-      "ratio": 0.999814603996192
+      "iterations": 459,
+      "goose_ns": 104385.20261437909,
+      "direct_c_ns": 107841.32679738563,
+      "ratio": 0.9679517650084186
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -767,10 +767,10 @@
       "data": "random",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 697,
-      "goose_ns": 71898.94978479197,
-      "direct_c_ns": 71935.18794835007,
-      "ratio": 0.9994962387033156
+      "iterations": 634,
+      "goose_ns": 72041.5977917981,
+      "direct_c_ns": 72207.08044164038,
+      "ratio": 0.9977082212875782
     },
     {
       "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
@@ -779,10 +779,10 @@
       "data": "random",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 637,
-      "goose_ns": 40768.11302982731,
-      "direct_c_ns": 41336.309262166404,
-      "ratio": 0.986254306625794
+      "iterations": 1038,
+      "goose_ns": 40950.19267822736,
+      "direct_c_ns": 41933.01252408478,
+      "ratio": 0.9765621455102248
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -791,10 +791,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "compress",
-      "iterations": 9582,
-      "goose_ns": 6347.46128156961,
-      "direct_c_ns": 6372.290962220831,
-      "ratio": 0.9961034923234944
+      "iterations": 9390,
+      "goose_ns": 6351.555165069222,
+      "direct_c_ns": 5471.250585729499,
+      "ratio": 1.1608964103446104
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -803,10 +803,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 12485,
-      "goose_ns": 2335.428834601522,
-      "direct_c_ns": 1696.3419303163796,
-      "ratio": 1.3767441533240579
+      "iterations": 12995,
+      "goose_ns": 2085.4078491727587,
+      "direct_c_ns": 2370.967064255483,
+      "ratio": 0.8795600245200396
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -815,10 +815,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 9001,
-      "goose_ns": 6445.691256527052,
-      "direct_c_ns": 6471.97778024664,
-      "ratio": 0.9959384094611978
+      "iterations": 3683,
+      "goose_ns": 8066.376866684768,
+      "direct_c_ns": 8047.827314689112,
+      "ratio": 1.0023049142669598
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -827,10 +827,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 33315,
-      "goose_ns": 1878.8508179498724,
-      "direct_c_ns": 1588.2042023112713,
-      "ratio": 1.1830033034893315
+      "iterations": 22249,
+      "goose_ns": 2047.0510584745382,
+      "direct_c_ns": 1981.0152815856893,
+      "ratio": 1.0333343096858854
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -839,10 +839,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 3214,
-      "goose_ns": 8156.019601742377,
-      "direct_c_ns": 8491.413192283759,
-      "ratio": 0.9605020291738767
+      "iterations": 3766,
+      "goose_ns": 7928.603027084439,
+      "direct_c_ns": 8017.777482740308,
+      "ratio": 0.9888779083919661
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -851,10 +851,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 33382,
-      "goose_ns": 1883.5644059672877,
-      "direct_c_ns": 1867.733928464442,
-      "ratio": 1.0084757669503068
+      "iterations": 33144,
+      "goose_ns": 1861.0713854694666,
+      "direct_c_ns": 1914.0141805454984,
+      "ratio": 0.9723393924589717
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -864,9 +864,9 @@
       "format": "raw",
       "operation": "crc32",
       "iterations": 1000000,
-      "goose_ns": 7.225785,
-      "direct_c_ns": 12.315928,
-      "ratio": 0.5867024393127339
+      "goose_ns": 16.907134,
+      "direct_c_ns": 17.03238,
+      "ratio": 0.9926465943103665
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -876,9 +876,9 @@
       "format": "raw",
       "operation": "adler32",
       "iterations": 1000000,
-      "goose_ns": 21.401197,
-      "direct_c_ns": 21.137641,
-      "ratio": 1.0124685625988255
+      "goose_ns": 20.300821,
+      "direct_c_ns": 20.904655,
+      "ratio": 0.9711148545622971
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -887,10 +887,10 @@
       "data": "random",
       "format": "raw",
       "operation": "compress",
-      "iterations": 9664,
-      "goose_ns": 5972.866411423841,
-      "direct_c_ns": 6037.1603890728475,
-      "ratio": 0.9893502949225306
+      "iterations": 4053,
+      "goose_ns": 7437.961509992598,
+      "direct_c_ns": 7484.3353071798665,
+      "ratio": 0.9938038856780266
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -900,9 +900,9 @@
       "format": "raw",
       "operation": "decompress",
       "iterations": 1000000,
-      "goose_ns": 23.116188,
-      "direct_c_ns": 22.458843,
-      "ratio": 1.0292688719539114
+      "goose_ns": 23.95689,
+      "direct_c_ns": 22.284097,
+      "ratio": 1.0750666719858561
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -911,10 +911,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 10220,
-      "goose_ns": 5667.800684931507,
-      "direct_c_ns": 5849.559001956947,
-      "ratio": 0.9689278598669346
+      "iterations": 10208,
+      "goose_ns": 5953.157719435737,
+      "direct_c_ns": 5985.909286833856,
+      "ratio": 0.9945285560089999
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -923,10 +923,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 587130,
-      "goose_ns": 55.98256093199121,
-      "direct_c_ns": 52.05583090627289,
-      "ratio": 1.0754330486586305
+      "iterations": 589205,
+      "goose_ns": 54.03204826842949,
+      "direct_c_ns": 48.948881968075625,
+      "ratio": 1.1038464229615927
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -935,10 +935,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 4011,
-      "goose_ns": 7641.213911742708,
-      "direct_c_ns": 7526.353527798554,
-      "ratio": 1.0152610933727624
+      "iterations": 4028,
+      "goose_ns": 6511.332174776564,
+      "direct_c_ns": 7434.648460774578,
+      "ratio": 0.8758090189644531
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -947,10 +947,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 807493,
-      "goose_ns": 28.889248575529447,
-      "direct_c_ns": 25.16757420807363,
-      "ratio": 1.1478757681088676
+      "iterations": 747049,
+      "goose_ns": 39.84868462443561,
+      "direct_c_ns": 37.78071585665733,
+      "ratio": 1.0547360927628873
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -960,9 +960,9 @@
       "format": "raw",
       "operation": "crc32",
       "iterations": 1000000,
-      "goose_ns": 7.975784,
-      "direct_c_ns": 8.954893,
-      "ratio": 0.8906621218142975
+      "goose_ns": 8.41484,
+      "direct_c_ns": 9.378941,
+      "ratio": 0.8972057719522919
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -972,9 +972,9 @@
       "format": "raw",
       "operation": "adler32",
       "iterations": 1000000,
-      "goose_ns": 19.773077,
-      "direct_c_ns": 19.948457,
-      "ratio": 0.9912083425800803
+      "goose_ns": 10.433803,
+      "direct_c_ns": 12.199239,
+      "ratio": 0.8552831041346103
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -983,10 +983,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "compress",
-      "iterations": 1050,
-      "goose_ns": 27445.97142857143,
-      "direct_c_ns": 27822.794285714284,
-      "ratio": 0.9864563259436405
+      "iterations": 2698,
+      "goose_ns": 21926.98925129726,
+      "direct_c_ns": 22153.57153446998,
+      "ratio": 0.9897722007117377
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -995,10 +995,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 3076,
-      "goose_ns": 9738.949934980494,
-      "direct_c_ns": 6485.42522756827,
-      "ratio": 1.5016671371958972
+      "iterations": 3040,
+      "goose_ns": 9788.403618421053,
+      "direct_c_ns": 9361.361184210526,
+      "ratio": 1.0456175577255586
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1007,10 +1007,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 1060,
-      "goose_ns": 27408.8320754717,
-      "direct_c_ns": 28021.31320754717,
-      "ratio": 0.9781423116204808
+      "iterations": 1049,
+      "goose_ns": 26385.875119161105,
+      "direct_c_ns": 27544.38131553861,
+      "ratio": 0.9579403805405512
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1019,10 +1019,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 2951,
-      "goose_ns": 9374.450016943409,
-      "direct_c_ns": 9804.549983056591,
-      "ratio": 0.956132615280003
+      "iterations": 6925,
+      "goose_ns": 7640.0073646209385,
+      "direct_c_ns": 7289.870758122744,
+      "ratio": 1.0480305643427292
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1031,10 +1031,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 1047,
-      "goose_ns": 27429.574021012417,
-      "direct_c_ns": 28148.957975167144,
-      "ratio": 0.9744436737306807
+      "iterations": 1768,
+      "goose_ns": 18940.302036199097,
+      "direct_c_ns": 18941.843325791855,
+      "ratio": 0.9999186304328334
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1043,10 +1043,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 7309,
-      "goose_ns": 8138.27883431386,
-      "direct_c_ns": 8196.596114379532,
-      "ratio": 0.9928851831599504
+      "iterations": 3245,
+      "goose_ns": 6852.655778120185,
+      "direct_c_ns": 6787.791371340524,
+      "ratio": 1.0095560401360495
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1055,10 +1055,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 70859,
-      "goose_ns": 430.2027829915748,
-      "direct_c_ns": 423.6483297816791,
-      "ratio": 1.0154714482487714
+      "iterations": 71061,
+      "goose_ns": 300.02880623689504,
+      "direct_c_ns": 284.45090837449516,
+      "ratio": 1.0547648026558267
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1067,10 +1067,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 316676,
-      "goose_ns": 189.1383148707196,
-      "direct_c_ns": 156.91857292627165,
-      "ratio": 1.2053277782457685
+      "iterations": 316856,
+      "goose_ns": 158.7333489029717,
+      "direct_c_ns": 159.96407831948898,
+      "ratio": 0.9923062138109583
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1079,10 +1079,10 @@
       "data": "random",
       "format": "raw",
       "operation": "compress",
-      "iterations": 2770,
-      "goose_ns": 21315.615884476534,
-      "direct_c_ns": 21375.656317689532,
-      "ratio": 0.9971911770885223
+      "iterations": 2749,
+      "goose_ns": 18126.781011276827,
+      "direct_c_ns": 18331.745725718443,
+      "ratio": 0.9888191382583896
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1091,10 +1091,10 @@
       "data": "random",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 240396,
-      "goose_ns": 126.6972828166858,
-      "direct_c_ns": 117.32052945972478,
-      "ratio": 1.0799242332108634
+      "iterations": 594883,
+      "goose_ns": 88.55439472971996,
+      "direct_c_ns": 102.07988797797213,
+      "ratio": 0.867500900361775
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1103,10 +1103,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 1069,
-      "goose_ns": 27274.186155285315,
-      "direct_c_ns": 27557.55285313377,
-      "ratio": 0.9897172764447323
+      "iterations": 1088,
+      "goose_ns": 21730.874080882353,
+      "direct_c_ns": 25874.59650735294,
+      "ratio": 0.8398536407981071
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1115,10 +1115,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 81920,
-      "goose_ns": 375.4128051757813,
-      "direct_c_ns": 351.8633178710937,
-      "ratio": 1.066927940790108
+      "iterations": 61627,
+      "goose_ns": 342.18946241095625,
+      "direct_c_ns": 413.18577896052057,
+      "ratio": 0.8281733782605623
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1127,10 +1127,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 2729,
-      "goose_ns": 21957.821912788568,
-      "direct_c_ns": 21951.15170392085,
-      "ratio": 1.000303866009296
+      "iterations": 1075,
+      "goose_ns": 26796.820465116278,
+      "direct_c_ns": 25629.416744186048,
+      "ratio": 1.0455493674546867
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1139,10 +1139,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 53952,
-      "goose_ns": 384.15958629893237,
-      "direct_c_ns": 573.5905619810202,
-      "ratio": 0.6697453057319378
+      "iterations": 53993,
+      "goose_ns": 540.9606060044821,
+      "direct_c_ns": 405.67595799455484,
+      "ratio": 1.3334795798072487
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1151,10 +1151,10 @@
       "data": "random",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 71020,
-      "goose_ns": 431.2105604055196,
-      "direct_c_ns": 409.8826809349479,
-      "ratio": 1.0520341074717343
+      "iterations": 177474,
+      "goose_ns": 338.2488927955644,
+      "direct_c_ns": 341.80172306929467,
+      "ratio": 0.989605581148548
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1163,10 +1163,10 @@
       "data": "random",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 212811,
-      "goose_ns": 202.9133644407479,
-      "direct_c_ns": 205.18687943762305,
-      "ratio": 0.9889197837449138
+      "iterations": 127733,
+      "goose_ns": 235.03640406159724,
+      "direct_c_ns": 237.52994919089036,
+      "ratio": 0.9895021864072846
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1175,10 +1175,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "compress",
-      "iterations": 193,
-      "goose_ns": 267716.22279792745,
-      "direct_c_ns": 266498.12953367876,
-      "ratio": 1.0045707385127998
+      "iterations": 180,
+      "goose_ns": 274081.1611111111,
+      "direct_c_ns": 262492.5,
+      "ratio": 1.0441485418101892
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1187,10 +1187,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 366,
-      "goose_ns": 98186.78415300546,
-      "direct_c_ns": 97638.32240437159,
-      "ratio": 1.005617279518204
+      "iterations": 595,
+      "goose_ns": 89177.22521008403,
+      "direct_c_ns": 77600.53277310924,
+      "ratio": 1.1491831566520692
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1199,10 +1199,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "compress",
-      "iterations": 170,
-      "goose_ns": 275154.34117647057,
-      "direct_c_ns": 273554.09411764704,
-      "ratio": 1.0058498377221703
+      "iterations": 179,
+      "goose_ns": 276399.35195530724,
+      "direct_c_ns": 277504.10614525137,
+      "ratio": 0.9960189627271105
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1211,10 +1211,10 @@
       "data": "read-like",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 627,
-      "goose_ns": 90466.17862838916,
-      "direct_c_ns": 85722.43381180223,
-      "ratio": 1.0553384289928294
+      "iterations": 334,
+      "goose_ns": 103864.35928143712,
+      "direct_c_ns": 103273.43113772455,
+      "ratio": 1.0057219764774206
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1223,10 +1223,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "compress",
-      "iterations": 190,
-      "goose_ns": 264295.2157894737,
-      "direct_c_ns": 270166.5578947368,
-      "ratio": 0.9782676947472131
+      "iterations": 172,
+      "goose_ns": 265846.3895348837,
+      "direct_c_ns": 264792.31395348837,
+      "ratio": 1.0039807635110607
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1235,10 +1235,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 609,
-      "goose_ns": 94734.03448275862,
-      "direct_c_ns": 88922.93760262725,
-      "ratio": 1.0653498077863734
+      "iterations": 608,
+      "goose_ns": 95243.48190789473,
+      "direct_c_ns": 95719.82072368421,
+      "ratio": 0.9950236135819296
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1247,10 +1247,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 4444,
-      "goose_ns": 6535.313456345634,
-      "direct_c_ns": 6617.770252025202,
-      "ratio": 0.9875400939380852
+      "iterations": 4422,
+      "goose_ns": 4877.809814563546,
+      "direct_c_ns": 6287.942333785617,
+      "ratio": 0.7757402271892163
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1259,10 +1259,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 20890,
-      "goose_ns": 2879.3677836285306,
-      "direct_c_ns": 2864.4244614648155,
-      "ratio": 1.0052168672502095
+      "iterations": 20944,
+      "goose_ns": 2496.7013941940413,
+      "direct_c_ns": 2900.6550324675327,
+      "ratio": 0.8607370977410383
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1272,9 +1272,9 @@
       "format": "raw",
       "operation": "compress",
       "iterations": 124,
-      "goose_ns": 400324.8306451613,
-      "direct_c_ns": 401563.93548387097,
-      "ratio": 0.9969143024828248
+      "goose_ns": 402935.3387096774,
+      "direct_c_ns": 405699.95967741933,
+      "ratio": 0.9931855527667783
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1283,10 +1283,10 @@
       "data": "random",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 12116,
-      "goose_ns": 2466.2601518653023,
-      "direct_c_ns": 2440.9409871244634,
-      "ratio": 1.0103727066219106
+      "iterations": 28865,
+      "goose_ns": 2022.7124545297072,
+      "direct_c_ns": 1987.8903862809632,
+      "ratio": 1.0175170967620055
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1294,35 +1294,35 @@
       "size": 65536,
       "data": "random",
       "format": "zlib",
-      "operation": "compress",
-      "iterations": 122,
-      "goose_ns": 404578.2786885246,
-      "direct_c_ns": 407708.74590163934,
-      "ratio": 0.992321805100865
-    },
-    {
-      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
-      "cc": "clang",
-      "size": 65536,
-      "data": "random",
-      "format": "zlib",
-      "operation": "decompress",
-      "iterations": 4988,
-      "goose_ns": 5710.517842822775,
-      "direct_c_ns": 5983.329791499599,
-      "ratio": 0.9544046612532702
-    },
-    {
-      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
-      "cc": "clang",
-      "size": 65536,
-      "data": "random",
-      "format": "gzip",
       "operation": "compress",
       "iterations": 123,
-      "goose_ns": 407262.27642276423,
-      "direct_c_ns": 405788.52845528454,
-      "ratio": 1.0036318127895083
+      "goose_ns": 403158.756097561,
+      "direct_c_ns": 404259.0325203252,
+      "ratio": 0.9972782885866405
+    },
+    {
+      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "cc": "clang",
+      "size": 65536,
+      "data": "random",
+      "format": "zlib",
+      "operation": "decompress",
+      "iterations": 4998,
+      "goose_ns": 5943.864345738295,
+      "direct_c_ns": 6092.26050420168,
+      "ratio": 0.9756418560301156
+    },
+    {
+      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "cc": "clang",
+      "size": 65536,
+      "data": "random",
+      "format": "gzip",
+      "operation": "compress",
+      "iterations": 122,
+      "goose_ns": 406913.762295082,
+      "direct_c_ns": 406388.8524590164,
+      "ratio": 1.0012916442783542
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1331,10 +1331,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 3280,
-      "goose_ns": 8975.557317073171,
-      "direct_c_ns": 8749.721646341464,
-      "ratio": 1.0258106120239991
+      "iterations": 7619,
+      "goose_ns": 7342.8309489434305,
+      "direct_c_ns": 6355.572516078226,
+      "ratio": 1.1553374507753085
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1343,10 +1343,10 @@
       "data": "random",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 4415,
-      "goose_ns": 6510.725254813137,
-      "direct_c_ns": 6622.323442808607,
-      "ratio": 0.9831481822113872
+      "iterations": 11038,
+      "goose_ns": 5315.909766262004,
+      "direct_c_ns": 5263.805127740533,
+      "ratio": 1.0098986640380885
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1355,10 +1355,10 @@
       "data": "random",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 8162,
-      "goose_ns": 3503.015682430777,
-      "direct_c_ns": 3594.1106346483707,
-      "ratio": 0.9746543828285614
+      "iterations": 8383,
+      "goose_ns": 3487.773112250984,
+      "direct_c_ns": 3509.5186687343435,
+      "ratio": 0.9938038350737135
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1366,47 +1366,47 @@
       "size": 1048576,
       "data": "read-like",
       "format": "raw",
-      "operation": "compress",
-      "iterations": 10,
-      "goose_ns": 4234100.6,
-      "direct_c_ns": 4226907.1,
-      "ratio": 1.0017018353679927
-    },
-    {
-      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
-      "cc": "clang",
-      "size": 1048576,
-      "data": "read-like",
-      "format": "raw",
-      "operation": "decompress",
-      "iterations": 40,
-      "goose_ns": 1224556.3,
-      "direct_c_ns": 1230544.55,
-      "ratio": 0.9951336585091535
-    },
-    {
-      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
-      "cc": "clang",
-      "size": 1048576,
-      "data": "read-like",
-      "format": "zlib",
       "operation": "compress",
       "iterations": 11,
-      "goose_ns": 4306528.818181818,
-      "direct_c_ns": 4309980.818181818,
-      "ratio": 0.9991990683611774
+      "goose_ns": 4259208.545454546,
+      "direct_c_ns": 4248747.909090909,
+      "ratio": 1.0024620515472933
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
       "cc": "clang",
       "size": 1048576,
       "data": "read-like",
-      "format": "zlib",
+      "format": "raw",
       "operation": "decompress",
       "iterations": 39,
-      "goose_ns": 1267522.3076923077,
-      "direct_c_ns": 1266083.2051282052,
-      "ratio": 1.001136657178828
+      "goose_ns": 1228175.435897436,
+      "direct_c_ns": 1225995.6923076923,
+      "ratio": 1.0017779373968605
+    },
+    {
+      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "cc": "clang",
+      "size": 1048576,
+      "data": "read-like",
+      "format": "zlib",
+      "operation": "compress",
+      "iterations": 11,
+      "goose_ns": 4255040.7272727275,
+      "direct_c_ns": 4258840.545454546,
+      "ratio": 0.9991077810635869
+    },
+    {
+      "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "cc": "clang",
+      "size": 1048576,
+      "data": "read-like",
+      "format": "zlib",
+      "operation": "decompress",
+      "iterations": 38,
+      "goose_ns": 1265266.6315789474,
+      "direct_c_ns": 1267665.3684210526,
+      "ratio": 0.9981077523281299
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1416,9 +1416,9 @@
       "format": "gzip",
       "operation": "compress",
       "iterations": 11,
-      "goose_ns": 4422633.2727272725,
-      "direct_c_ns": 4304058.636363637,
-      "ratio": 1.0275494937178216
+      "goose_ns": 4296900.2727272725,
+      "direct_c_ns": 4314391.2727272725,
+      "ratio": 0.9959458938945648
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1427,10 +1427,10 @@
       "data": "read-like",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 37,
-      "goose_ns": 1300598.0,
-      "direct_c_ns": 1310831.8378378379,
-      "ratio": 0.9921928675041047
+      "iterations": 38,
+      "goose_ns": 1298093.3157894737,
+      "direct_c_ns": 1295775.5263157894,
+      "ratio": 1.001788727620342
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1439,10 +1439,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 696,
-      "goose_ns": 72441.6709770115,
-      "direct_c_ns": 71846.29885057472,
-      "ratio": 1.0082867473476265
+      "iterations": 697,
+      "goose_ns": 71826.5968436155,
+      "direct_c_ns": 71801.19799139167,
+      "ratio": 1.0003537385577725
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1451,10 +1451,10 @@
       "data": "read-like",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 1280,
-      "goose_ns": 39276.3421875,
-      "direct_c_ns": 39555.14765625,
-      "ratio": 0.9929514744535165
+      "iterations": 1271,
+      "goose_ns": 38842.93863099921,
+      "direct_c_ns": 39181.30841856806,
+      "ratio": 0.9913639997941343
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1464,9 +1464,9 @@
       "format": "raw",
       "operation": "compress",
       "iterations": 10,
-      "goose_ns": 7757921.7,
-      "direct_c_ns": 7672903.0,
-      "ratio": 1.0110803824836572
+      "goose_ns": 7459688.2,
+      "direct_c_ns": 7496414.2,
+      "ratio": 0.9951008576873994
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1475,10 +1475,10 @@
       "data": "random",
       "format": "raw",
       "operation": "decompress",
-      "iterations": 1590,
-      "goose_ns": 30615.93962264151,
-      "direct_c_ns": 33399.24339622642,
-      "ratio": 0.9166656639323938
+      "iterations": 1661,
+      "goose_ns": 32505.145695364237,
+      "direct_c_ns": 30271.865141481034,
+      "ratio": 1.0737741313079179
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1488,9 +1488,9 @@
       "format": "zlib",
       "operation": "compress",
       "iterations": 10,
-      "goose_ns": 7786172.8,
-      "direct_c_ns": 7517526.1,
-      "ratio": 1.0357360515183314
+      "goose_ns": 7847788.4,
+      "direct_c_ns": 7846624.1,
+      "ratio": 1.0001483822832804
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1499,10 +1499,10 @@
       "data": "random",
       "format": "zlib",
       "operation": "decompress",
-      "iterations": 725,
-      "goose_ns": 72188.33655172413,
-      "direct_c_ns": 71503.93379310345,
-      "ratio": 1.0095715399463336
+      "iterations": 726,
+      "goose_ns": 68998.33746556473,
+      "direct_c_ns": 69173.68181818182,
+      "ratio": 0.9974651580195201
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1512,9 +1512,9 @@
       "format": "gzip",
       "operation": "compress",
       "iterations": 10,
-      "goose_ns": 7522269.0,
-      "direct_c_ns": 7552087.0,
-      "ratio": 0.9960516874342152
+      "goose_ns": 7599438.7,
+      "direct_c_ns": 7552822.1,
+      "ratio": 1.0061720770571307
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1523,10 +1523,10 @@
       "data": "random",
       "format": "gzip",
       "operation": "decompress",
-      "iterations": 487,
-      "goose_ns": 102861.35728952772,
-      "direct_c_ns": 101964.0431211499,
-      "ratio": 1.0088002999970458
+      "iterations": 450,
+      "goose_ns": 103278.03555555556,
+      "direct_c_ns": 102296.50444444445,
+      "ratio": 1.009594962373755
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1535,10 +1535,10 @@
       "data": "random",
       "format": "raw",
       "operation": "crc32",
-      "iterations": 688,
-      "goose_ns": 72070.74854651163,
-      "direct_c_ns": 71893.30523255814,
-      "ratio": 1.002468147950348
+      "iterations": 697,
+      "goose_ns": 71772.26255380201,
+      "direct_c_ns": 71743.82926829268,
+      "ratio": 1.0003963168093941
     },
     {
       "compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)",
@@ -1547,10 +1547,10 @@
       "data": "random",
       "format": "raw",
       "operation": "adler32",
-      "iterations": 1291,
-      "goose_ns": 39006.17738187451,
-      "direct_c_ns": 38964.68938807126,
-      "ratio": 1.0010647587457981
+      "iterations": 1283,
+      "goose_ns": 38914.5697583788,
+      "direct_c_ns": 39086.85736554949,
+      "ratio": 0.9955921857426546
     }
   ]
 }
